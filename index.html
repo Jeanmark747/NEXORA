@@ -1,803 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#03110c">
-<title>NEXORA | Digital Currency Hub</title>
-
-<style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-:root {
-  --bg: #030b08;
-  --panel: #071a12;
-  --panel2: #0a2519;
-  --green: #19e58a;
-  --green-dark: #087c4b;
-  --text: #f2fff8;
-  --muted: #93b5a2;
-  --border: #174b34;
-}
-
-body {
-  background: radial-gradient(ellipse at top, #103b28, var(--bg) 55%);
-  color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
-  min-height: 100vh;
-}
-
-button {
-  font: inherit;
-  cursor: pointer;
-}
-
-.app {
-  max-width: 760px;
-  margin: auto;
-  padding-bottom: 95px;
-}
-
-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 17px;
-  background: #04130ef2;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  backdrop-filter: blur(12px);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-}
-
-.logo {
-  width: 43px;
-  height: 43px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #8affbe, #00a85f);
-  color: #032016;
-  font-size: 27px;
-  font-weight: 900;
-  font-style: italic;
-}
-
-.brand h1 {
-  font-size: 22px;
-  letter-spacing: 2px;
-}
-
-.brand p {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 4px;
-}
-
-.header-btn {
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--green);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  font-size: 19px;
-}
-
-main {
-  padding: 16px 14px;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-.balance-card {
-  background: linear-gradient(120deg, #0b472e, #06180f 80%);
-  border: 1px solid #18734a;
-  border-radius: 21px;
-  padding: 21px;
-  position: relative;
-  overflow: hidden;
-}
-
-.balance-card::after {
-  content: "₿";
-  position: absolute;
-  right: 12px;
-  top: 5px;
-  font-size: 115px;
-  font-weight: 900;
-  color: #ffffff0b;
-}
-
-.label {
-  font-size: 12px;
-  color: #b7d8c5;
-}
-
-.balance {
-  font-size: 32px;
-  font-weight: 900;
-  margin: 10px 0;
-}
-
-.demo-label {
-  color: var(--green);
-  font-size: 12px;
-  margin-bottom: 18px;
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-  position: relative;
-  z-index: 1;
-}
-
-.btn {
-  border: 1px solid var(--green);
-  border-radius: 11px;
-  padding: 12px;
-  background: var(--green);
-  color: #032016;
-  font-weight: 800;
-  flex: 1;
-}
-
-.btn.secondary {
-  background: transparent;
-  color: var(--text);
-}
-
-.section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 23px 2px 13px;
-}
-
-.section-head h2 {
-  font-size: 18px;
-}
-
-.section-head button {
-  background: none;
-  border: 0;
-  color: var(--green);
-  font-size: 12px;
-}
-
-.quick-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-
-.quick {
-  background: linear-gradient(145deg, #0a291b, #06130d);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 14px;
-  padding: 13px 3px;
-  font-size: 11px;
-}
-
-.quick-icon {
-  margin: 0 auto 8px;
-  width: 39px;
-  height: 39px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #0b3a26;
-  color: var(--green);
-  font-size: 20px;
-}
-
-.market-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 9px;
-}
-
-.market-card {
-  background: #06160f;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  padding: 12px;
-  min-width: 0;
-}
-
-.coin-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.coin-icon {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: #153426;
-  font-weight: 900;
-  flex-shrink: 0;
-}
-
-.coin-name {
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.coin-symbol {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 3px;
-}
-
-.coin-price {
-  font-size: 14px;
-  font-weight: 800;
-  overflow-wrap: anywhere;
-}
-
-.coin-change {
-  color: var(--green);
-  font-size: 12px;
-  margin-top: 6px;
-}
-
-.page-title {
-  font-size: 25px;
-  margin: 5px 0 7px;
-}
-
-.page-subtitle {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 19px;
-}
-
-.plan-list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-
-.plan-card {
-  background: linear-gradient(110deg, #0a3925, #05150e 80%);
-  border: 1px solid #17613e;
-  border-radius: 17px;
-  padding: 16px;
-}
-
-.plan-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.plan-title {
-  font-weight: 800;
-  font-size: 16px;
-}
-
-.badge {
-  border: 1px solid #24754e;
-  color: var(--green);
-  border-radius: 30px;
-  padding: 5px 8px;
-  font-size: 10px;
-}
-
-.plan-amount {
-  font-size: 27px;
-  font-weight: 900;
-  margin: 14px 0 5px;
-}
-
-.plan-duration {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.plan-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  border-top: 1px solid var(--border);
-  padding-top: 13px;
-  margin-top: 15px;
-}
-
-.plan-footer small {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  margin-bottom: 5px;
-}
-
-.plan-footer strong {
-  color: var(--green);
-  font-size: 15px;
-}
-
-.plan-footer .btn {
-  flex: 0 0 auto;
-  padding: 10px 12px;
-  font-size: 12px;
-}
-
-.notice {
-  border: 1px solid #66551b;
-  background: #211c0b;
-  color: #f0dfa4;
-  border-radius: 12px;
-  padding: 12px;
-  font-size: 12px;
-  line-height: 1.5;
-  margin-top: 16px;
-}
-
-.profile-card {
-  border: 1px solid var(--border);
-  background: var(--panel);
-  border-radius: 16px;
-  padding: 15px;
-  margin-bottom: 13px;
-}
-
-.profile-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
-
-.profile-row:last-child {
-  border-bottom: 0;
-}
-
-.profile-row span {
-  color: var(--muted);
-}
-
-.referral-card {
-  background: linear-gradient(130deg, #0b402a, #06160f);
-  border: 1px solid #17613e;
-  border-radius: 18px;
-  padding: 19px;
-}
-
-.referral-code {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.referral-code input {
-  min-width: 0;
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  background: #03100b;
-  border: 1px solid var(--border);
-  color: white;
-}
-
-.referral-code button {
-  border: 0;
-  border-radius: 10px;
-  background: var(--green);
-  padding: 0 14px;
-  font-weight: bold;
-  color: #032016;
-}
-
-.empty {
-  border: 1px dashed #28553e;
-  border-radius: 15px;
-  text-align: center;
-  padding: 27px 15px;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.bottom-nav {
-  position: fixed;
-  z-index: 10;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(760px, 100%);
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  background: #03100df5;
-  border-top: 1px solid var(--border);
-  padding: 9px 8px calc(9px + env(safe-area-inset-bottom));
-  backdrop-filter: blur(12px);
-}
-
-.nav-btn {
-  background: none;
-  border: 0;
-  color: var(--muted);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 5px;
-  font-size: 11px;
-}
-
-.nav-icon {
-  font-size: 22px;
-}
-
-.nav-btn.active {
-  color: var(--green);
-}
-
-.toast {
-  display: none;
-  position: fixed;
-  z-index: 20;
-  left: 50%;
-  bottom: 100px;
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: 90%;
-  background: #103b28;
-  border: 1px solid var(--green);
-  border-radius: 11px;
-  padding: 12px 15px;
-  font-size: 13px;
-  text-align: center;
-}
-
-@media (min-width: 560px) {
-  main {
-    padding: 22px;
-  }
-
-  .market-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .plan-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#06130d">
+  <title>NEXORA — Digital Currency Hub</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{--bg:#06110c;--panel:#0b1d14;--panel2:#10271b;--line:#1c4931;--green:#20e58b;--muted:#9ab6a5;--white:#f3fff7;--red:#ff7373}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,Arial,sans-serif}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
+    .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(ellipse at top,#123b26 0,transparent 55%),var(--bg)}
+    .auth-card{width:100%;max-width:410px;background:rgba(11,29,20,.97);border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:0 20px 70px #0007}
+    .brand{font-size:30px;font-weight:900;letter-spacing:3px;text-align:center;color:var(--green);margin:4px 0}
+    .tagline{text-align:center;color:var(--muted);font-size:13px;margin:8px 0 25px}
+    .auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#06130d;padding:5px;border-radius:12px;margin-bottom:18px}
+    .auth-tabs button{border:0;border-radius:9px;padding:11px;background:transparent;color:var(--muted);font-weight:700}
+    .auth-tabs button.active{background:var(--green);color:#042013}
+    .field{margin:13px 0}
+    .field label{display:block;color:#c3d9cb;font-size:12px;margin-bottom:7px}
+    .field input{width:100%;padding:14px;border:1px solid var(--line);border-radius:11px;background:#06130d;color:white;outline:none}
+    .field input:focus{border-color:var(--green)}
+    .primary{border:0;background:var(--green);color:#042013;font-weight:800;padding:14px 16px;border-radius:11px;width:100%;margin-top:8px}
+    .primary:disabled{opacity:.55;cursor:wait}
+    .message{font-size:13px;line-height:1.45;color:var(--green);margin:10px 0;min-height:18px;overflow-wrap:anywhere}
+    .fineprint{font-size:11px;line-height:1.5;color:#789785;text-align:center;margin-top:18px}
+    .app{max-width:520px;margin:0 auto;min-height:100vh;padding-bottom:90px}
+    .topbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:16px 18px;background:#06110ceF;border-bottom:1px solid #163b28;backdrop-filter:blur(12px)}
+    .top-brand{font-size:22px;font-weight:900;letter-spacing:2px;color:var(--green)}
+    .status{font-size:11px;color:var(--green);border:1px solid var(--line);padding:6px 9px;border-radius:20px}
+    .content{padding:17px}
+    .page{display:none}.page.active{display:block}
+    .welcome{font-size:14px;color:var(--muted);margin:4px 0 14px}
+    h1{font-size:24px;margin:4px 0 7px}h2{font-size:18px;margin:0 0 14px}h3{font-size:15px;margin:0 0 8px}
+    .balance-card{background:linear-gradient(135deg,#123d27,#0b2116 72%);border:1px solid #23643f;border-radius:20px;padding:21px;margin-bottom:15px}
+    .label{font-size:12px;color:#b2d2bf}.balance{font-size:32px;font-weight:850;margin:9px 0}.positive{color:var(--green);font-size:12px}
+    .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:17px 0}
+    .quick{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 5px;text-align:center;color:var(--white);font-size:11px}
+    .quick span{display:block;font-size:21px;margin-bottom:7px}
+    .section-head{display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px}
+    .section-head h2{margin:0}.muted{color:var(--muted);font-size:12px}
+    .coin-list,.plan-list,.rows{display:grid;gap:10px}
+    .coin,.plan,.row,.profile-card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:14px}
+    .coin{display:flex;align-items:center;gap:11px}.coin-icon{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:#173c28;color:var(--green);font-weight:900}
+    .coin-main{flex:1}.coin-name{font-weight:700;font-size:14px}.coin-symbol{font-size:11px;color:var(--muted);margin-top:4px}.coin-price{text-align:right;font-size:13px;font-weight:700}.coin-change{font-size:11px;color:var(--green);margin-top:4px}
+    .plan-top,.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.plan-rate{font-size:23px;color:var(--green);font-weight:850}.plan-desc{font-size:12px;color:var(--muted);line-height:1.5;margin:9px 0 13px}
+    .pill{font-size:10px;color:var(--green);border:1px solid var(--line);border-radius:20px;padding:5px 8px}
+    .secondary{border:1px solid var(--line);background:#10271b;color:var(--green);padding:10px 12px;border-radius:9px;font-weight:700}
+    .ref-box{padding:15px;background:#06130d;border:1px dashed #28764a;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;overflow-wrap:anywhere}
+    .profile-card{margin-bottom:12px}.profile-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #173a27;font-size:13px}.profile-row:last-child{border-bottom:0}.profile-row span:first-child{color:var(--muted)}
+    .notice{background:#211b0d;border:1px solid #5b4820;color:#e8d8a6;padding:12px;border-radius:12px;font-size:12px;line-height:1.5;margin:12px 0}
+    .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:grid;grid-template-columns:repeat(5,1fr);background:#07150eF2;border-top:1px solid var(--line);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:10;backdrop-filter:blur(12px)}
+    .nav-btn{border:0;background:transparent;color:#87a895;font-size:10px;padding:7px 2px}.nav-btn span{display:block;font-size:19px;margin-bottom:4px}.nav-btn.active{color:var(--green)}
+    .empty{text-align:center;padding:22px;color:var(--muted);font-size:13px}
+    @media(min-width:600px){.app{border-left:1px solid #112b1d;border-right:1px solid #112b1d}.bottom-nav{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
+  </style>
 </head>
-
 <body>
-<div class="app">
-
-<header>
-  <div class="brand">
-    <div class="logo">N</div>
-    <div>
-      <h1>NEXORA</h1>
-      <p>Your Digital Currency Hub</p>
-    </div>
-  </div>
-  <button class="header-btn" onclick="showPage('profile')" aria-label="Profile">♙</button>
-</header>
-
-<main>
-
-<!-- HOME -->
-<section class="page active" id="home">
-  <div class="balance-card">
-    <div class="label">Sample Wallet Balance</div>
-    <div class="balance">₱2,560.00</div>
-    <div class="demo-label">● Demo preview · Not real funds</div>
-    <div class="actions">
-      <button class="btn" onclick="notify('Deposits are not enabled in this demo.')">↓ Deposit</button>
-      <button class="btn secondary" onclick="notify('Withdrawals are not enabled in this demo.')">↑ Withdraw</button>
-    </div>
-  </div>
-
-  <div class="section-head">
-    <h2>Quick Access</h2>
-  </div>
-
-  <div class="quick-grid">
-    <button class="quick" onclick="showPage('markets')">
-      <div class="quick-icon">⌁</div>Markets
-    </button>
-    <button class="quick" onclick="showPage('wallet')">
-      <div class="quick-icon">▣</div>Wallet
-    </button>
-    <button class="quick" onclick="showPage('plans')">
-      <div class="quick-icon">▤</div>My Plans
-    </button>
-    <button class="quick" onclick="showPage('history')">
-      <div class="quick-icon">◷</div>History
-    </button>
-  </div>
-
-  <div class="section-head">
-    <h2>Market Overview</h2>
-    <button onclick="showPage('markets')">View all ›</button>
-  </div>
-  <div class="market-grid" id="homeMarkets"></div>
-
-  <div class="section-head">
-    <h2>Crypto Plans</h2>
-    <button onclick="showPage('plans')">View all ›</button>
-  </div>
-  <div class="plan-list" id="homePlans"></div>
-
-  <div class="notice">
-    Demo preview only. Prices shown are sample values, not live market quotes.
-    Plan amounts are not guaranteed investment returns.
-  </div>
-</section>
-
-<!-- MY PLANS -->
-<section class="page" id="plans">
-  <h2 class="page-title">My Plans</h2>
-  <p class="page-subtitle">
-    Explore the eight sample plan cards. Activation is not enabled.
-  </p>
-  <div class="plan-list" id="allPlans"></div>
-  <div class="notice">
-    These plans are for interface demonstration only. No money is collected
-    and no investment profit is generated by this page.
-  </div>
-</section>
-
-<!-- REFERRAL -->
-<section class="page" id="referral">
-  <h2 class="page-title">Referral</h2>
-  <p class="page-subtitle">Invite friends to explore the NEXORA demo.</p>
-
-  <div class="referral-card">
-    <div class="label">Demo invitation code</div>
-    <h2 style="margin-top:10px">NEXORA-DEMO</h2>
-    <p style="color:var(--muted);font-size:13px;line-height:1.5;margin-top:8px">
-      Referral tracking and rewards are not enabled yet.
-    </p>
-    <div class="referral-code">
-      <input id="refCode" value="NEXORA-DEMO" readonly>
-      <button onclick="copyReferral()">Copy</button>
-    </div>
-  </div>
-
-  <div class="section-head"><h2>Referral Summary</h2></div>
-  <div class="profile-card">
-    <div class="profile-row"><span>Invited friends</span><strong>0</strong></div>
-    <div class="profile-row"><span>Demo rewards</span><strong>₱0.00</strong></div>
-  </div>
-</section>
-
-<!-- PROFILE -->
-<section class="page" id="profile">
-  <h2 class="page-title">My Profile</h2>
-  <p class="page-subtitle">Manage your demo profile.</p>
-
-  <div class="profile-card">
-    <div class="profile-row"><span>Platform</span><strong>NEXORA</strong></div>
-    <div class="profile-row"><span>Account status</span><strong style="color:var(--green)">Demo</strong></div>
-    <div class="profile-row"><span>Demo account ID</span><strong>NX-DEMO-001</strong></div>
-    <div class="profile-row"><span>Authentication</span><strong>Not connected</strong></div>
-  </div>
-
-  <div class="notice">
-    Account registration and login have not been connected yet.
-    Never enter passwords, seed phrases, or private keys into this demo.
-  </div>
-</section>
-
-<!-- MARKETS -->
-<section class="page" id="markets">
-  <h2 class="page-title">Crypto Markets</h2>
-  <p class="page-subtitle">Eight cryptocurrency interface examples.</p>
-  <div class="market-grid" id="allMarkets"></div>
-  <div class="notice">
-    All displayed prices and changes are illustrative sample values, not live data.
-  </div>
-</section>
-
-<!-- WALLET -->
-<section class="page" id="wallet">
-  <h2 class="page-title">My Wallet</h2>
-  <p class="page-subtitle">No blockchain wallet is connected.</p>
-  <div class="profile-card" id="walletList"></div>
-  <div class="notice">
-    Real deposits and withdrawals are not enabled. Real crypto transactions
-    require secure wallet integration and appropriate legal and compliance review.
-  </div>
-</section>
-
-<!-- HISTORY -->
-<section class="page" id="history">
-  <h2 class="page-title">Transaction History</h2>
-  <p class="page-subtitle">Demo transactions only.</p>
-  <div class="empty">
-    ◷<br><br>
-    No transactions to display yet.
-  </div>
-</section>
-
-</main>
-</div>
-
-<nav class="bottom-nav" aria-label="Main navigation">
-  <button class="nav-btn active" data-page="home" onclick="showPage('home')">
-    <span class="nav-icon">⌂</span><span>Home</span>
-  </button>
-  <button class="nav-btn" data-page="plans" onclick="showPage('plans')">
-    <span class="nav-icon">▤</span><span>My Plans</span>
-  </button>
-  <button class="nav-btn" data-page="referral" onclick="showPage('referral')">
-    <span class="nav-icon">♧</span><span>Referral</span>
-  </button>
-  <button class="nav-btn" data-page="profile" onclick="showPage('profile')">
-    <span class="nav-icon">♙</span><span>Profile</span>
-  </button>
-</nav>
-
-<div class="toast" id="toast"></div>
-
-<script>
-const coins = [
-  {name:"Bitcoin",symbol:"BTC",icon:"₿",price:"$67,432.20",change:"+2.45%",color:"#f7931a"},
-  {name:"Ethereum",symbol:"ETH",icon:"◆",price:"$2,471.32",change:"+1.87%",color:"#8291ff"},
-  {name:"Tether",symbol:"USDT",icon:"₮",price:"$1.00",change:"+0.01%",color:"#20ad85"},
-  {name:"BNB",symbol:"BNB",icon:"◆",price:"$598.22",change:"+1.30%",color:"#e9b928"},
-  {name:"Solana",symbol:"SOL",icon:"≋",price:"$162.17",change:"+3.21%",color:"#b39aff"},
-  {name:"XRP",symbol:"XRP",icon:"✕",price:"$0.53",change:"+1.12%",color:"#b5c1ce"},
-  {name:"Dogecoin",symbol:"DOGE",icon:"Ð",price:"$0.17",change:"+0.98%",color:"#c9a640"},
-  {name:"USD Coin",symbol:"USDC",icon:"$",price:"$1.00",change:"+0.00%",color:"#2775ca"}
-];
-
-const plans = [
-  {name:"Plan 1",amount:200},
-  {name:"Plan 2",amount:500},
-  {name:"Plan 3",amount:1000},
-  {name:"Plan 4",amount:5000},
-  {name:"Plan 5",amount:10000},
-  {name:"Plan 6",amount:20000},
-  {name:"Plan 7",amount:30000},
-  {name:"Plan 8",amount:50000}
-];
-
-function money(amount) {
-  return "₱" + amount.toLocaleString("en-PH");
-}
-
-function marketCard(coin) {
-  return `
-    <article class="market-card">
-      <div class="coin-row">
-        <div class="coin-icon" style="color:${coin.color}">${coin.icon}</div>
-        <div>
-          <div class="coin-name">${coin.name}</div>
-          <div class="coin-symbol">${coin.symbol}</div>
+  <section id="authScreen" class="auth-wrap">
+    <div class="auth-card">
+      <div class="brand">NEXORA</div>
+      <div class="tagline">YOUR DIGITAL CURRENCY HUB</div>
+      <div class="auth-tabs">
+        <button id="loginTab" class="active" type="button" onclick="setMode('login')">LOGIN</button>
+        <button id="registerTab" type="button" onclick="setMode('register')">REGISTER</button>
+      </div>
+      <form id="authForm">
+        <div class="field">
+          <label for="mobile">PHILIPPINE MOBILE NUMBER</label>
+          <input id="mobile" type="tel" inputmode="numeric" maxlength="11" placeholder="09XXXXXXXXX" autocomplete="tel" required>
         </div>
-      </div>
-      <div class="coin-price">${coin.price}</div>
-      <div class="coin-change">${coin.change} ↗</div>
-    </article>`;
-}
-
-function planCard(plan) {
-  return `
-    <article class="plan-card">
-      <div class="plan-top">
-        <div class="plan-title">💎 ${plan.name}</div>
-        <span class="badge">DEMO</span>
-      </div>
-      <div class="plan-amount">${money(plan.amount)}</div>
-      <div class="plan-duration">Sample plan amount · 7-day period</div>
-      <div class="plan-footer">
-        <div>
-          <small>Activation status</small>
-          <strong>Not activated</strong>
+        <div class="field">
+          <label for="password">PASSWORD (MINIMUM 8 CHARACTERS)</label>
+          <input id="password" type="password" minlength="8" placeholder="Enter password" autocomplete="current-password" required>
         </div>
-        <button class="btn" onclick="notify('Plan activation is not enabled in this demo.')">
-          View Plan ›
-        </button>
-      </div>
-    </article>`;
-}
-
-document.getElementById("homeMarkets").innerHTML =
-  coins.slice(0,4).map(marketCard).join("");
-
-document.getElementById("allMarkets").innerHTML =
-  coins.map(marketCard).join("");
-
-document.getElementById("homePlans").innerHTML =
-  plans.slice(0,2).map(planCard).join("");
-
-document.getElementById("allPlans").innerHTML =
-  plans.map(planCard).join("");
-
-document.getElementById("walletList").innerHTML =
-  coins.map(coin => `
-    <div class="profile-row">
-      <div style="display:flex;align-items:center;gap:9px">
-        <div class="coin-icon" style="color:${coin.color}">${coin.icon}</div>
-        <div>
-          <strong>${coin.symbol}</strong>
-          <div style="font-size:11px;color:var(--muted)">${coin.name}</div>
+        <div id="confirmWrap" class="field hidden">
+          <label for="confirmPassword">CONFIRM PASSWORD</label>
+          <input id="confirmPassword" type="password" minlength="8" placeholder="Re-enter password" autocomplete="new-password">
         </div>
-      </div>
-      <strong>0.00 ${coin.symbol}</strong>
+        <div id="authMessage" class="message" role="status"></div>
+        <button id="authSubmit" class="primary" type="submit">LOGIN</button>
+      </form>
+      <div class="fineprint">Demo dashboard. Market prices, balance, plans, and referral information are sample data, not real investment offers.</div>
     </div>
-  `).join("");
+  </section>
 
-function showPage(id) {
-  document.querySelectorAll(".page").forEach(page => {
-    page.classList.toggle("active", page.id === id);
-  });
+  <main id="app" class="app hidden">
+    <header class="topbar">
+      <div class="top-brand">NEXORA</div>
+      <div class="status">● ACCOUNT</div>
+    </header>
+    <div class="content">
+      <section id="home" class="page active">
+        <div class="welcome" id="welcomeText">Welcome back</div>
+        <h1>Dashboard</h1>
+        <div class="balance-card">
+          <div class="label">DEMO TOTAL BALANCE</div>
+          <div class="balance">₱2,560.00</div>
+          <div class="positive">▲ Demo account overview</div>
+        </div>
+        <div class="quick-grid">
+          <button class="quick" onclick="showPage('wallet')"><span>＋</span>Deposit</button>
+          <button class="quick" onclick="showPage('wallet')"><span>↗</span>Withdraw</button>
+          <button class="quick" onclick="showPage('plans')"><span>▣</span>My Plans</button>
+          <button class="quick" onclick="showPage('referral')"><span>♧</span>Invite</button>
+        </div>
+        <div class="section-head"><h2>Market Watch</h2><span class="muted">Sample prices</span></div>
+        <div id="homeCoins" class="coin-list"></div>
+        <div class="notice">This is a demonstration interface. The displayed balance and market prices are not connected to real money or live trading.</div>
+      </section>
 
-  document.querySelectorAll(".nav-btn").forEach(button => {
-    button.classList.toggle("active", button.dataset.page === id);
-  });
+      <section id="markets" class="page">
+        <h1>Markets</h1><p class="muted">Sample cryptocurrency prices</p>
+        <div id="marketCoins" class="coin-list"></div>
+      </section>
 
-  window.scrollTo({top:0,behavior:"smooth"});
-}
+      <section id="plans" class="page">
+        <h1>My Plans</h1><p class="muted">Sample plans for preview only</p>
+        <div id="plansList" class="plan-list"></div>
+        <div class="notice">Plans are illustrative only. No deposit, purchase, or earnings are processed by this demo.</div>
+      </section>
 
-let toastTimer;
+      <section id="referral" class="page">
+        <h1>Referral</h1><p class="muted">Invite friends to preview the referral page.</p>
+        <div class="profile-card">
+          <h3>Your demo referral code</h3>
+          <div class="ref-box"><strong id="refCode">NEXORA-DEMO</strong><button class="secondary" onclick="copyReferral()">Copy</button></div>
+          <p class="muted" style="line-height:1.6">This is a demo code. Referral tracking and rewards are not active.</p>
+        </div>
+        <button class="secondary" style="width:100%" onclick="shareReferral()">Share invite</button>
+      </section>
 
-function notify(message) {
-  const element = document.getElementById("toast");
-  element.textContent = message;
-  element.style.display = "block";
+      <section id="wallet" class="page">
+        <h1>Wallet</h1><p class="muted">Demo wallet overview</p>
+        <div class="balance-card"><div class="label">DEMO BALANCE</div><div class="balance">₱2,560.00</div><div class="positive">Preview only · No real funds</div></div>
+        <div class="profile-card">
+          <div class="row"><span>Deposit</span><span class="pill">Not connected</span></div>
+          <p class="muted">Payment processing is not configured. Do not send money to this demo website.</p>
+          <div class="row"><span>Withdrawal</span><span class="pill">Not connected</span></div>
+        </div>
+      </section>
 
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    element.style.display = "none";
-  }, 2600);
-}
+      <section id="history" class="page">
+        <h1>Transaction History</h1>
+        <div class="empty">No transactions yet.<br><br>This demo does not process real payments.</div>
+      </section>
 
-function copyReferral() {
-  const input = document.getElementById("refCode");
-  input.select();
-  input.setSelectionRange(0, 99999);
+      <section id="profile" class="page">
+        <h1>My Profile</h1>
+        <div class="profile-card">
+          <div class="profile-row"><span>Platform</span><strong>NEXORA</strong></div>
+          <div class="profile-row"><span>Mobile number</span><strong id="profilePhone">—</strong></div>
+          <div class="profile-row"><span>Account status</span><strong style="color:var(--green)">Signed in</strong></div>
+        </div>
+        <button class="primary" style="background:#251313;color:#ff9999;border:1px solid #5b2929" onclick="logout()">LOG OUT</button>
+      </section>
+    </div>
+  </main>
 
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(input.value)
-      .then(() => notify("Demo code copied!"))
-      .catch(() => notify("Invitation code: NEXORA-DEMO"));
-  } else {
-    try {
-      document.execCommand("copy");
-      notify("Demo code copied!");
-    } catch (error) {
-      notify("Invitation code: NEXORA-DEMO");
+  <nav id="bottomNav" class="bottom-nav hidden">
+    <button class="nav-btn active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button>
+    <button class="nav-btn" data-page="markets" onclick="showPage('markets')"><span>⌁</span>Markets</button>
+    <button class="nav-btn" data-page="plans" onclick="showPage('plans')"><span>▣</span>Plans</button>
+    <button class="nav-btn" data-page="referral" onclick="showPage('referral')"><span>♧</span>Referral</button>
+    <button class="nav-btn" data-page="profile" onclick="showPage('profile')"><span>◉</span>Profile</button>
+  </nav>
+
+  <script>
+    const SUPABASE_URL = "https://avzzxuoralwsavttlkzq.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_im87e4PeG9aL0-RU0e__WA_i_NnoNRm";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let authMode = "login";
+    const coins = [
+      {name:"Bitcoin",symbol:"BTC",price:"₱6,120,450",change:"+2.45%",icon:"₿"},
+      {name:"Ethereum",symbol:"ETH",price:"₱212,800",change:"+1.82%",icon:"Ξ"},
+      {name:"Solana",symbol:"SOL",price:"₱8,940",change:"+3.10%",icon:"◎"},
+      {name:"BNB",symbol:"BNB",price:"₱36,500",change:"+0.94%",icon:"◆"},
+      {name:"XRP",symbol:"XRP",price:"₱31.20",change:"+1.12%",icon:"X"},
+      {name:"Cardano",symbol:"ADA",price:"₱22.80",change:"+0.65%",icon:"₳"},
+      {name:"Dogecoin",symbol:"DOGE",price:"₱9.70",change:"+1.43%",icon:"Ð"},
+      {name:"TRON",symbol:"TRX",price:"₱19.10",change:"+0.81%",icon:"T"}
+    ];
+    const plans = [
+      {name:"Starter Plan",amount:"₱500",rate:"1.0%",duration:"7 days",desc:"Sample starter plan for interface preview."},
+      {name:"Basic Plan",amount:"₱1,000",rate:"1.5%",duration:"14 days",desc:"Sample basic plan. No actual investment is accepted."},
+      {name:"Silver Plan",amount:"₱2,500",rate:"2.0%",duration:"21 days",desc:"Sample plan for testing the dashboard layout."},
+      {name:"Gold Plan",amount:"₱5,000",rate:"2.5%",duration:"30 days",desc:"Illustrative details only; no earnings are generated."},
+      {name:"Platinum Plan",amount:"₱10,000",rate:"3.0%",duration:"30 days",desc:"Sample plan only, not a real financial product."},
+      {name:"Diamond Plan",amount:"₱20,000",rate:"3.5%",duration:"45 days",desc:"Preview card. Payments and returns are not enabled."},
+      {name:"Premium Plan",amount:"₱50,000",rate:"4.0%",duration:"60 days",desc:"Demo content only; no real funds are involved."},
+      {name:"VIP Plan",amount:"₱100,000",rate:"5.0%",duration:"90 days",desc:"Illustrative interface only; not an investment offer."}
+    ];
+
+    function renderCoins(targetId) {
+      const target = document.getElementById(targetId);
+      target.innerHTML = coins.map(c => `
+        <div class="coin">
+          <div class="coin-icon">${c.icon}</div>
+          <div class="coin-main"><div class="coin-name">${c.name}</div><div class="coin-symbol">${c.symbol}</div></div>
+          <div class="coin-price">${c.price}<div class="coin-change">${c.change}</div></div>
+        </div>`).join("");
     }
-  }
-}
-</script>
+    function renderPlans() {
+      document.getElementById("plansList").innerHTML = plans.map(p => `
+        <div class="plan">
+          <div class="plan-top"><div><h3>${p.name}</h3><div class="muted">${p.amount} sample amount</div></div><div class="plan-rate">${p.rate}</div></div>
+          <div class="plan-desc">${p.desc}<br>Display duration: ${p.duration}</div>
+          <button class="secondary" style="width:100%" onclick="alert('Demo only: plan purchases are disabled.')">View plan</button>
+        </div>`).join("");
+    }
+    function setMode(mode) {
+      authMode = mode;
+      document.getElementById("loginTab").classList.toggle("active", mode === "login");
+      document.getElementById("registerTab").classList.toggle("active", mode === "register");
+      document.getElementById("confirmWrap").classList.toggle("hidden", mode !== "register");
+      document.getElementById("authSubmit").textContent = mode === "register" ? "CREATE ACCOUNT" : "LOGIN";
+      document.getElementById("password").autocomplete = mode === "register" ? "new-password" : "current-password";
+      document.getElementById("authMessage").textContent = "";
+    }
+    function normalizePhone(value) {
+      const raw = value.trim().replace(/[\s()-]/g, "");
+      if (!/^09\d{9}$/.test(raw)) throw new Error("Ibutang ang sakto nga PH number: 09XXXXXXXXX.");
+      return "+63" + raw.slice(1);
+    }
+    function showMessage(text, isError = false) {
+      const el = document.getElementById("authMessage");
+      el.style.color = isError ? "var(--red)" : "var(--green)";
+      el.textContent = text;
+    }
+    document.getElementById("authForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      const button = document.getElementById("authSubmit");
+      button.disabled = true;
+      showMessage("Please wait...");
+      try {
+        const phone = normalizePhone(document.getElementById("mobile").value);
+        const password = document.getElementById("password").value;
+        if (password.length < 8) throw new Error("Password kinahanglan labing menos 8 characters.");
+
+        if (authMode === "register") {
+          const confirm = document.getElementById("confirmPassword").value;
+          if (password !== confirm) throw new Error("Dili pareho ang passwords.");
+          const { data, error } = await supabaseClient.auth.signUp({ phone, password });
+          if (error) throw error;
+          if (!data.session) {
+            showMessage("Supabase nangayo og phone OTP/confirmation. I-configure ang Phone Auth settings; dili pa maablihan ang dashboard hangtod ma-authenticate ang account.", true);
+            return;
+          }
+          const { error: profileError } = await supabaseClient.from("nexora_profiles").upsert({
+            id: data.user.id,
+            mobile_number: phone
+          });
+          if (profileError) throw profileError;
+          await openDashboard(data.user);
+        } else {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({ phone, password });
+          if (error) throw error;
+          await openDashboard(data.user);
+        }
+      } catch (err) {
+        showMessage(err.message || "Naay error. Sulayi pag-usab.", true);
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    async function openDashboard(user) {
+      document.getElementById("authScreen").classList.add("hidden");
+      document.getElementById("app").classList.remove("hidden");
+      document.getElementById("bottomNav").classList.remove("hidden");
+      document.getElementById("profilePhone").textContent = user?.phone || "—";
+      document.getElementById("welcomeText").textContent = user?.phone ? "Welcome back, " + user.phone : "Welcome back";
+      showPage("home");
+    }
+    function showPage(pageId) {
+      document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === pageId));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.page === pageId));
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+    async function logout() {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) { alert(error.message); return; }
+      location.reload();
+    }
+    async function copyReferral() {
+      try {
+        await navigator.clipboard.writeText(document.getElementById("refCode").textContent);
+        alert("Demo referral code copied.");
+      } catch (_) { alert("Referral code: NEXORA-DEMO"); }
+    }
+    async function shareReferral() {
+      const text = "Check out NEXORA demo. Referral code: NEXORA-DEMO";
+      if (navigator.share) {
+        try { await navigator.share({title:"NEXORA",text}); } catch (_) {}
+      } else {
+        await copyReferral();
+      }
+    }
+
+    async function init() {
+      renderCoins("homeCoins");
+      renderCoins("marketCoins");
+      renderPlans();
+      const { data, error } = await supabaseClient.auth.getSession();
+      if (error) {
+        showMessage(error.message, true);
+        return;
+      }
+      if (data.session?.user) await openDashboard(data.session.user);
+    }
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        document.getElementById("app").classList.add("hidden");
+        document.getElementById("bottomNav").classList.add("hidden");
+        document.getElementById("authScreen").classList.remove("hidden");
+      }
+    });
+    init();
+  </script>
 </body>
-  </html>
+</html>
