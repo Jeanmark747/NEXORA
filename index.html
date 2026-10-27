@@ -509,9 +509,69 @@ h3{font-size:15px;margin:0 0 8px}
 })();
 </script>
 <section id="profile" class="page">
-<h1>My Profile</h1>
-<div class="profile-card"><div class="profile-row"><span>Platform</span><strong>NEXORA</strong></div><div class="profile-row"><span>Mobile number</span><strong id="profilePhone">—</strong></div><div class="profile-row"><span>Account status</span><strong style="color:var(--green)">Signed in</strong></div></div>
-<button class="primary" style="background:#251313;color:#ff9999;border:1px solid #5b2929" onclick="logout()">LOG OUT</button>
+  <h1>My Profile</h1>
+  <p class="muted">Manage your NEXORA account</p>
+
+  <div class="profile-card">
+    <div class="profile-row">
+      <span>Registered Mobile Number</span>
+      <strong id="profilePhone">—</strong>
+    </div>
+
+    <div style="margin-top:18px">
+      <div class="label">TOTAL BALANCE · DEMO</div>
+      <div class="balance">₱2,560.00</div>
+      <div class="muted">Sample balance only · Not real funds</div>
+    </div>
+  </div>
+
+  <div class="profile-card">
+    <h3>Account Actions</h3>
+
+    <button class="primary" onclick="showPage('wallet')">
+      ↓ DEPOSIT
+    </button>
+
+    <button class="primary"
+      style="background:#10271b;color:var(--green);border:1px solid var(--line)"
+      onclick="showPage('withdrawal')">
+      ↗ WITHDRAWAL
+    </button>
+
+    <button class="secondary"
+      style="width:100%;margin-top:12px"
+      onclick="showPage('history')">
+      DEPOSIT HISTORY
+    </button>
+
+    <button class="secondary"
+      style="width:100%;margin-top:10px"
+      onclick="showPage('history')">
+      WITHDRAWAL HISTORY
+    </button>
+  </div>
+
+  <button class="profile-card"
+    style="width:100%;text-align:left;color:var(--white);font:inherit"
+    onclick="showPage('plans')">
+    <div style="font-size:18px;font-weight:800">▣ MY PLANS</div>
+    <p class="muted">View your selected plans</p>
+    <span style="color:var(--green)">View Plans →</span>
+  </button>
+
+  <button class="profile-card"
+    style="width:100%;text-align:left;color:var(--white);font:inherit"
+    onclick="showPage('referral')">
+    <div style="font-size:18px;font-weight:800">♧ REFERRAL LINK &amp; TEAM</div>
+    <p class="muted">Your invitation link and referral network</p>
+    <span style="color:var(--green)">View Referral &amp; Team →</span>
+  </button>
+
+  <button class="primary"
+    style="background:#251313;color:#ff9999;border:1px solid #5b2929;margin-top:8px"
+    onclick="logout()">
+    LOGOUT
+  </button>
 </section>
 </div>
 </main>
