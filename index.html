@@ -1,78 +1,461 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#06130d">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#06130d">
 <title>NEXORA — Digital Currency Hub</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#06110c;--panel:#0b1d14;--line:#1c4931;--green:#20e58b;--muted:#9ab6a5;--white:#f3fff7;--red:#ff7373}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,sans-serif}button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(ellipse at top,#123b26,transparent 55%),var(--bg)}.auth-card{width:100%;max-width:410px;background:#0b1d14;border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:0 20px 70px #0007}.brand{text-align:center;color:var(--green);font-size:30px;font-weight:900;letter-spacing:3px}.tagline{text-align:center;color:var(--muted);font-size:13px;margin:8px 0 25px}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#06130d;padding:5px;border-radius:12px;margin-bottom:18px}.auth-tabs button{border:0;border-radius:9px;padding:11px;background:transparent;color:var(--muted);font-weight:700}.auth-tabs button.active{background:var(--green);color:#042013}.field{margin:13px 0}.field label{display:block;color:#c3d9cb;font-size:12px;margin-bottom:7px}.field input{width:100%;padding:14px;border:1px solid var(--line);border-radius:11px;background:#06130d;color:white;outline:none}.primary{border:0;background:var(--green);color:#042013;font-weight:800;padding:14px 16px;border-radius:11px;width:100%;margin-top:8px}.primary:disabled{opacity:.55}.message{font-size:13px;line-height:1.45;margin:10px 0;min-height:18px;overflow-wrap:anywhere}.fineprint,.muted{font-size:12px;line-height:1.5;color:var(--muted)}.fineprint{text-align:center;font-size:11px;margin-top:18px}.app{max-width:520px;margin:auto;min-height:100vh;padding-bottom:90px}.topbar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:#06110cef;border-bottom:1px solid #163b28}.top-brand{font-size:22px;font-weight:900;letter-spacing:2px;color:var(--green)}.status,.pill{font-size:11px;color:var(--green);border:1px solid var(--line);padding:6px 9px;border-radius:20px}.content{padding:17px}.page{display:none}.page.active{display:block}.welcome{font-size:14px;color:var(--muted);margin:4px 0 14px}h1{font-size:24px;margin:4px 0 7px}h2{font-size:18px;margin:0 0 14px}h3{font-size:15px;margin:0 0 8px}.balance-card{background:linear-gradient(135deg,#123d27,#0b2116 72%);border:1px solid #23643f;border-radius:20px;padding:21px;margin-bottom:15px}.label{font-size:12px;color:#b2d2bf}.balance{font-size:32px;font-weight:850;margin:9px 0}.positive{color:var(--green);font-size:12px}.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:17px 0}.quick,.coin,.plan,.row,.profile-card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:14px}.quick{text-align:center;color:var(--white);font-size:11px;padding:13px 5px}.quick span{display:block;font-size:21px;margin-bottom:7px}.section-head{display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px}.coin-list,.plan-list{display:grid;gap:10px}.coin{display:flex;align-items:center;gap:11px}.coin-icon{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:#173c28;color:var(--green);font-weight:900}.coin-main{flex:1}.coin-name{font-weight:700;font-size:14px}.coin-symbol,.coin-change{font-size:11px;color:var(--muted);margin-top:4px}.coin-price{text-align:right;font-size:13px;font-weight:700}.coin-change{color:var(--green)}.plan-top,.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.plan-rate{font-size:23px;color:var(--green);font-weight:850}.plan-desc{font-size:12px;color:var(--muted);line-height:1.5;margin:9px 0 13px}.secondary{border:1px solid var(--line);background:#10271b;color:var(--green);padding:10px 12px;border-radius:9px;font-weight:700}.ref-box{padding:15px;background:#06130d;border:1px dashed #28764a;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;overflow-wrap:anywhere}.profile-card{margin-bottom:12px}.profile-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #173a27;font-size:13px}.profile-row:last-child{border:0}.profile-row span:first-child{color:var(--muted)}.notice{background:#211b0d;border:1px solid #5b4820;color:#e8d8a6;padding:12px;border-radius:12px;font-size:12px;line-height:1.5;margin:12px 0}.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:grid;grid-template-columns:repeat(4,1fr);background:#07150ef2;border-top:1px solid var(--line);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:10}.nav-btn{border:0;background:transparent;color:#87a895;font-size:10px;padding:7px 2px}.nav-btn span{display:block;font-size:19px;margin-bottom:4px}.nav-btn.active{color:var(--green)}.market-shell{overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:12px 0;margin-bottom:14px}.market-track{display:flex;width:max-content;animation:marketScroll 32s linear infinite}.market-shell:hover .market-track{animation-play-state:paused}.market-item{display:flex;align-items:center;gap:9px;padding:0 18px;min-width:210px;border-right:1px solid var(--line)}.market-dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#173c28;color:var(--green);font-weight:900}.market-info{min-width:62px}.market-name{font-size:12px;font-weight:700}.market-symbol{font-size:10px;color:var(--muted);margin-top:3px}.market-value{text-align:right;font-size:12px;font-weight:700;margin-left:auto}.market-change{color:var(--green);font-size:10px;margin-top:3px}@keyframes marketScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}.crypto-plan{position:relative;overflow:hidden;background:linear-gradient(135deg,#03150d,#06110c 58%,#092719);border:1px solid #16b879;border-radius:18px;padding:16px;box-shadow:inset 0 0 24px #00e8870c,0 8px 25px #0003}.crypto-plan:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 25%,#16e58b0a 50%,transparent 75%);pointer-events:none}.crypto-plan>*{position:relative}.crypto-plan-head{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--green);border-radius:30px;padding:7px 13px;color:var(--green);font-weight:900;font-size:12px;letter-spacing:1.5px;margin-bottom:14px}.crypto-plan-main{display:flex;align-items:center;gap:14px;padding:4px 0 17px}.crypto-coin{flex:0 0 86px;width:86px;height:86px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,#214d3b,#07130d 70%);border:3px solid #23e99a;box-shadow:0 0 20px #00ed8a55,inset 0 0 12px #20e58b33;font-size:36px;font-weight:900;color:#effff6;text-shadow:0 0 12px #20e58b}.crypto-info{min-width:0}.crypto-info h3{font-size:25px;letter-spacing:1px;margin:0 0 3px}.crypto-fullname{font-size:11px;color:#a9cbbc;letter-spacing:2px;margin-bottom:8px}.crypto-tagline{font-size:11px;line-height:1.45;color:#a7c1b3}.crypto-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #176849;border-radius:14px;background:#020d08a8;margin:0 0 13px;padding:12px 5px}.crypto-stat{text-align:center;padding:0 3px;min-width:0}.crypto-stat+.crypto-stat{border-left:1px solid #176849}.crypto-stat-label{font-size:9px;color:#9ab6a5;letter-spacing:.6px;margin:5px 0 8px}.crypto-stat-value{font-size:clamp(14px,4vw,20px);font-weight:900;color:#f3fff7;white-space:nowrap}.crypto-stat:last-child .crypto-stat-value{color:var(--green)}.crypto-buy{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:1px solid #5dffc0;border-radius:13px;padding:13px;background:linear-gradient(100deg,#36f2a0,#13d783);color:#032013;font-size:17px;font-weight:900;letter-spacing:1px;box-shadow:0 0 16px #00e88738}.crypto-buy:active{transform:scale(.99)}.empty{text-align:center;padding:22px;color:var(--muted);font-size:13px}@media(min-width:600px){.app{border-left:1px solid #112b1d;border-right:1px solid #112b1d}}
-</style></head>
+:root{--bg:#06110c;--panel:#0b1d14;--line:#1c4931;--green:#20e58b;--muted:#9ab6a5;--white:#f3fff7;--red:#ff7373}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(ellipse at top,#123b26,transparent 55%),var(--bg)}
+.auth-card{width:100%;max-width:410px;background:#0b1d14;border:1px solid var(--line);border-radius:24px;padding:26px;box-shadow:0 20px 70px #0007}
+.brand{text-align:center;color:var(--green);font-size:30px;font-weight:900;letter-spacing:3px}
+.tagline{text-align:center;color:var(--muted);font-size:13px;margin:8px 0 25px}
+.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#06130d;padding:5px;border-radius:12px;margin-bottom:18px}
+.auth-tabs button{border:0;border-radius:9px;padding:11px;background:transparent;color:var(--muted);font-weight:700}
+.auth-tabs button.active{background:var(--green);color:#042013}
+.field{margin:13px 0}
+.field label{display:block;color:#c3d9cb;font-size:12px;margin-bottom:7px}
+.field input{width:100%;padding:14px;border:1px solid var(--line);border-radius:11px;background:#06130d;color:white;outline:none}
+.primary{border:0;background:var(--green);color:#042013;font-weight:800;padding:14px 16px;border-radius:11px;width:100%;margin-top:8px}
+.primary:disabled{opacity:.55}
+.message{font-size:13px;line-height:1.45;margin:10px 0;min-height:18px;overflow-wrap:anywhere}
+.fineprint,.muted{font-size:12px;line-height:1.5;color:var(--muted)}
+.fineprint{text-align:center;font-size:11px;margin-top:18px}
+.app{max-width:520px;margin:auto;min-height:100vh;padding-bottom:90px}
+.topbar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:16px 18px;background:#06110cef;border-bottom:1px solid #163b28}
+.top-brand{font-size:22px;font-weight:900;letter-spacing:2px;color:var(--green)}
+.status,.pill{font-size:11px;color:var(--green);border:1px solid var(--line);padding:6px 9px;border-radius:20px}
+.content{padding:17px}
+.page{display:none}
+.page.active{display:block}
+.welcome{font-size:14px;color:var(--muted);margin:4px 0 14px}
+h1{font-size:24px;margin:4px 0 7px}
+h2{font-size:18px;margin:0 0 14px}
+h3{font-size:15px;margin:0 0 8px}
+.balance-card{background:linear-gradient(135deg,#123d27,#0b2116 72%);border:1px solid #23643f;border-radius:20px;padding:21px;margin-bottom:15px}
+.label{font-size:12px;color:#b2d2bf}
+.balance{font-size:32px;font-weight:850;margin:9px 0}
+.positive{color:var(--green);font-size:12px}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:17px 0}
+.quick,.coin,.plan,.row,.profile-card{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:14px}
+.quick{text-align:center;color:var(--white);font-size:11px;padding:13px 5px}
+.quick span{display:block;font-size:21px;margin-bottom:7px}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px}
+.coin-list,.plan-list{display:grid;gap:10px}
+.coin{display:flex;align-items:center;gap:11px}
+.coin-icon{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:#173c28;color:var(--green);font-weight:900}
+.coin-main{flex:1}
+.coin-name{font-weight:700;font-size:14px}
+.coin-symbol,.coin-change{font-size:11px;color:var(--muted);margin-top:4px}
+.coin-price{text-align:right;font-size:13px;font-weight:700}
+.coin-change{color:var(--green)}
+.plan-top,.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.plan-rate{font-size:23px;color:var(--green);font-weight:850}
+.plan-desc{font-size:12px;color:var(--muted);line-height:1.5;margin:9px 0 13px}
+.secondary{border:1px solid var(--line);background:#10271b;color:var(--green);padding:10px 12px;border-radius:9px;font-weight:700}
+.ref-box{padding:15px;background:#06130d;border:1px dashed #28764a;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;overflow-wrap:anywhere}
+.profile-card{margin-bottom:12px}
+.profile-row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #173a27;font-size:13px}
+.profile-row:last-child{border:0}
+.profile-row span:first-child{color:var(--muted)}
+.notice{background:#211b0d;border:1px solid #5b4820;color:#e8d8a6;padding:12px;border-radius:12px;font-size:12px;line-height:1.5;margin:12px 0}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:grid;grid-template-columns:repeat(4,1fr);background:#07150ef2;border-top:1px solid var(--line);padding:8px 4px max(8px,env(safe-area-inset-bottom));z-index:10}
+.nav-btn{border:0;background:transparent;color:#87a895;font-size:10px;padding:7px 2px}
+.nav-btn span{display:block;font-size:19px;margin-bottom:4px}
+.nav-btn.active{color:var(--green)}
+.market-shell{overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:12px 0;margin-bottom:14px}
+.market-track{display:flex;width:max-content;animation:marketScroll 32s linear infinite}
+.market-shell:hover .market-track{animation-play-state:paused}
+.market-item{display:flex;align-items:center;gap:9px;padding:0 18px;min-width:210px;border-right:1px solid var(--line)}
+.market-dot{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#173c28;color:var(--green);font-weight:900}
+.market-info{min-width:62px}
+.market-name{font-size:12px;font-weight:700}
+.market-symbol{font-size:10px;color:var(--muted);margin-top:3px}
+.market-value{text-align:right;font-size:12px;font-weight:700;margin-left:auto}
+.market-change{color:var(--green);font-size:10px;margin-top:3px}
+@keyframes marketScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.crypto-plan{position:relative;overflow:hidden;background:linear-gradient(135deg,#03150d,#06110c 58%,#092719);border:1px solid #16b879;border-radius:18px;padding:16px;box-shadow:inset 0 0 24px #00e8870c,0 8px 25px #0003}
+.crypto-plan:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 25%,#16e58b0a 50%,transparent 75%);pointer-events:none}
+.crypto-plan>*{position:relative}
+.crypto-plan-head{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--green);border-radius:30px;padding:7px 13px;color:var(--green);font-weight:900;font-size:12px;letter-spacing:1.5px;margin-bottom:14px}
+.crypto-plan-main{display:flex;align-items:center;gap:14px;padding:4px 0 17px}
+.crypto-coin{flex:0 0 86px;width:86px;height:86px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 25%,#214d3b,#07130d 70%);border:3px solid #23e99a;box-shadow:0 0 20px #00ed8a55,inset 0 0 12px #20e58b33;font-size:36px;font-weight:900;color:#effff6;text-shadow:0 0 12px #20e58b}
+.crypto-info{min-width:0}
+.crypto-info h3{font-size:25px;letter-spacing:1px;margin:0 0 3px}
+.crypto-fullname{font-size:11px;color:#a9cbbc;letter-spacing:2px;margin-bottom:8px}
+.crypto-tagline{font-size:11px;line-height:1.45;color:#a7c1b3}
+.crypto-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid #176849;border-radius:14px;background:#020d08a8;margin:0 0 13px;padding:12px 5px}
+.crypto-stat{text-align:center;padding:0 3px;min-width:0}
+.crypto-stat+.crypto-stat{border-left:1px solid #176849}
+.crypto-stat-label{font-size:9px;color:#9ab6a5;letter-spacing:.6px;margin:5px 0 8px}
+.crypto-stat-value{font-size:clamp(14px,4vw,20px);font-weight:900;color:#f3fff7;white-space:nowrap}
+.crypto-stat:last-child .crypto-stat-value{color:var(--green)}
+.crypto-buy{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:1px solid #5dffc0;border-radius:13px;padding:13px;background:linear-gradient(100deg,#36f2a0,#13d783);color:#032013;font-size:17px;font-weight:900;letter-spacing:1px;box-shadow:0 0 16px #00e88738}
+.crypto-buy:active{transform:scale(.99)}
+.empty{text-align:center;padding:22px;color:var(--muted);font-size:13px}
+@media(min-width:600px){.app{border-left:1px solid #112b1d;border-right:1px solid #112b1d}}
+</style>
+</head>
 <body>
-<section id="authScreen" class="auth-wrap"><div class="auth-card"><div class="brand">NEXORA</div><div class="tagline">YOUR DIGITAL CURRENCY HUB</div>
-<div class="auth-tabs"><button id="loginTab" class="active" type="button" onclick="setMode('login')">LOGIN</button><button id="registerTab" type="button" onclick="setMode('register')">REGISTER</button></div>
-<form id="authForm"><div class="field"><label for="mobile">PHILIPPINE MOBILE NUMBER</label><input id="mobile" type="tel" inputmode="numeric" maxlength="11" placeholder="09XXXXXXXXX" autocomplete="tel" required></div>
+
+<section id="authScreen" class="auth-wrap">
+<div class="auth-card">
+<div class="brand">NEXORA</div>
+<div class="tagline">YOUR DIGITAL CURRENCY HUB</div>
+<div class="auth-tabs">
+<button id="loginTab" class="active" type="button" onclick="setMode('login')">LOGIN</button>
+<button id="registerTab" type="button" onclick="setMode('register')">REGISTER</button>
+</div>
+<form id="authForm">
+<div class="field"><label for="mobile">PHILIPPINE MOBILE NUMBER</label><input id="mobile" type="tel" inputmode="numeric" maxlength="11" placeholder="09XXXXXXXXX" autocomplete="tel" required></div>
 <div class="field"><label for="password">PASSWORD (MINIMUM 8 CHARACTERS)</label><input id="password" type="password" minlength="8" placeholder="Enter password" autocomplete="current-password" required></div>
 <div id="confirmWrap" class="field hidden"><label for="confirmPassword">CONFIRM PASSWORD</label><input id="confirmPassword" type="password" minlength="8" placeholder="Re-enter password" autocomplete="new-password"></div>
 <div id="invitationWrap" class="field hidden"><label for="invitationCode">INVITATION CODE (OPTIONAL)</label><input id="invitationCode" type="text" placeholder="Enter invitation code"></div>
-<div id="authMessage" class="message" role="status"></div><button id="authSubmit" class="primary" type="submit">LOGIN</button></form>
-<div class="fineprint">Demo dashboard. Market prices, balance, plans, and referral information are sample data, not real investment offers.</div></div></section>
-<main id="app" class="app hidden"><header class="topbar"><div class="top-brand">NEXORA</div><div class="status">● ACCOUNT</div></header><div class="content">
-<section id="home" class="page active"><div class="welcome" id="welcomeText">Welcome back</div><h1>Dashboard</h1><div class="balance-card"><div class="label">DEMO TOTAL BALANCE</div><div class="balance">₱2,560.00</div><div class="positive">▲ Demo account overview</div></div>
-<div class="quick-grid"><button class="quick" onclick="showPage('wallet')"><span>＋</span>Deposit</button><button class="quick" onclick="showPage('wallet')"><span>↗</span>Withdraw</button><button class="quick" onclick="showPage('plans')"><span>▣</span>My Plans</button><button class="quick" onclick="showPage('referral')"><span>♧</span>Invite</button></div>
-<div class="section-head"><h2>Market Overview</h2><span class="muted">Moving · Sample data</span></div><div class="market-shell"><div id="marketTrack" class="market-track"></div></div>
-<div class="section-head"><h2>Featured Plans</h2><button class="secondary" onclick="showPage('plans')">View all</button></div><div id="homePlans" class="plan-list"></div>
-<div class="notice">Demo balance, sample plans, market prices, and displayed total-earn figures only. Prices are not live, and this website does not process real payments or investments. Displayed earnings are not guaranteed or payable.</div></section>
-<section id="plans" class="page"><h1>My Plans</h1><p class="muted">Sample plans for preview only</p><div id="plansList" class="plan-list"></div><div class="notice">Illustrative plans and total-earn figures only. No deposit, purchase, or earnings are processed; displayed amounts are not guaranteed returns.</div></section>
-<section id="referral" class="page"><h1>Referral</h1><p class="muted">Invite friends to preview the referral page.</p><div class="profile-card"><h3>Your demo referral code</h3><div class="ref-box"><strong id="refCode">NEXORA-DEMO</strong><button class="secondary" onclick="copyReferral()">Copy</button></div><p class="muted">Demo code only. Referral tracking and rewards are not active.</p></div><button class="secondary" style="width:100%" onclick="shareReferral()">Share invite</button></section>
-<section id="wallet" class="page"><h1>Wallet</h1><p class="muted">Demo wallet overview</p><div class="balance-card"><div class="label">DEMO BALANCE</div><div class="balance">₱2,560.00</div><div class="positive">Preview only · No real funds</div></div><div class="profile-card"><div class="row"><span>Deposit</span><span class="pill">Not connected</span></div><p class="muted">Payment processing is not configured. Do not send money to this demo website.</p><div class="row"><span>Withdrawal</span><span class="pill">Not connected</span></div></div></section>
+<div id="authMessage" class="message" role="status"></div>
+<button id="authSubmit" class="primary" type="submit">LOGIN</button>
+</form>
+<div class="fineprint">Demo dashboard. Market prices, balance, plans, and referral information are sample data, not real investment offers.</div>
+</div>
+</section>
+
+<main id="app" class="app hidden">
+<header class="topbar"><div class="top-brand">NEXORA</div><div class="status">● ACCOUNT</div></header>
+<div class="content">
+<section id="home" class="page active">
+<div class="welcome" id="welcomeText">Welcome back</div>
+<h1>Dashboard</h1>
+<div class="balance-card"><div class="label">DEMO TOTAL BALANCE</div><div class="balance">₱2,560.00</div><div class="positive">▲ Demo account overview</div></div>
+<div class="quick-grid">
+<button class="quick" onclick="showPage('wallet')"><span>＋</span>Deposit</button>
+<button class="quick" onclick="showPage('wallet')"><span>↗</span>Withdraw</button>
+<button class="quick" onclick="showPage('plans')"><span>▣</span>My Plans</button>
+<button class="quick" onclick="showPage('referral')"><span>♧</span>Invite</button>
+</div>
+<div class="section-head"><h2>Market Overview</h2><span class="muted">Moving · Sample data</span></div>
+<div class="market-shell"><div id="marketTrack" class="market-track"></div></div>
+<div class="section-head"><h2>All Plans</h2><button class="secondary" onclick="showPage('plans')">My Plans</button></div>
+<div id="homePlans" class="plan-list"></div>
+<div class="notice">Demo balance, sample plans, market prices, and displayed total-earn figures only. Prices are not live, and this website does not process real payments or investments. Displayed earnings are not guaranteed or payable.</div>
+</section>
+
+<section id="plans" class="page">
+<h1>My Plans</h1>
+<p class="muted">Only plans you select will appear here.</p>
+<div id="plansList" class="plan-list"></div>
+<div id="myPlansEmpty" class="empty">You haven't selected any plans yet.<br><br>Go to Home and tap BUY PLAN to select a plan.</div>
+<div class="notice">Illustrative plans and total-earn figures only. No deposit, purchase, or earnings are processed; displayed amounts are not guaranteed returns.</div>
+</section>
+
+<section id="referral" class="page">
+<h1>Referral</h1><p class="muted">Invite friends to preview the referral page.</p>
+<div class="profile-card"><h3>Your demo referral code</h3><div class="ref-box"><strong id="refCode">NEXORA-DEMO</strong><button class="secondary" onclick="copyReferral()">Copy</button></div><p class="muted">Demo code only. Referral tracking and rewards are not active.</p></div>
+<button class="secondary" style="width:100%" onclick="shareReferral()">Share invite</button>
+</section>
+
+<section id="wallet" class="page">
+<h1>Wallet</h1><p class="muted">Demo wallet overview</p>
+<div class="balance-card"><div class="label">DEMO BALANCE</div><div class="balance">₱2,560.00</div><div class="positive">Preview only · No real funds</div></div>
+<div class="profile-card"><div class="row"><span>Deposit</span><span class="pill">Not connected</span></div><p class="muted">Payment processing is not configured. Do not send money to this demo website.</p><div class="row"><span>Withdrawal</span><span class="pill">Not connected</span></div></div>
+</section>
+
 <section id="history" class="page"><h1>Transaction History</h1><div class="empty">No transactions yet.<br><br>This demo does not process real payments.</div></section>
-<section id="profile" class="page"><h1>My Profile</h1><div class="profile-card"><div class="profile-row"><span>Platform</span><strong>NEXORA</strong></div><div class="profile-row"><span>Mobile number</span><strong id="profilePhone">—</strong></div><div class="profile-row"><span>Account status</span><strong style="color:var(--green)">Signed in</strong></div></div><button class="primary" style="background:#251313;color:#ff9999;border:1px solid #5b2929" onclick="logout()">LOG OUT</button></section>
-</div></main>
-<nav id="bottomNav" class="bottom-nav hidden"><button class="nav-btn active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button><button class="nav-btn" data-page="plans" onclick="showPage('plans')"><span>▣</span>My Plans</button><button class="nav-btn" data-page="referral" onclick="showPage('referral')"><span>♧</span>Referral</button><button class="nav-btn" data-page="profile" onclick="showPage('profile')"><span>◉</span>Profile</button></nav>
+
+<section id="profile" class="page">
+<h1>My Profile</h1>
+<div class="profile-card"><div class="profile-row"><span>Platform</span><strong>NEXORA</strong></div><div class="profile-row"><span>Mobile number</span><strong id="profilePhone">—</strong></div><div class="profile-row"><span>Account status</span><strong style="color:var(--green)">Signed in</strong></div></div>
+<button class="primary" style="background:#251313;color:#ff9999;border:1px solid #5b2929" onclick="logout()">LOG OUT</button>
+</section>
+</div>
+</main>
+
+<nav id="bottomNav" class="bottom-nav hidden">
+<button class="nav-btn active" data-page="home" onclick="showPage('home')"><span>⌂</span>Home</button>
+<button class="nav-btn" data-page="plans" onclick="showPage('plans')"><span>▣</span>My Plans</button>
+<button class="nav-btn" data-page="referral" onclick="showPage('referral')"><span>♧</span>Referral</button>
+<button class="nav-btn" data-page="profile" onclick="showPage('profile')"><span>◉</span>Profile</button>
+</nav>
+
 <script>
 const SUPABASE_URL="https://avzzxuoralwsavttlkzq.supabase.co";
 const SUPABASE_KEY="sb_publishable_im87e4PeG9aL0-RU0e__WA_i_NnoNRm";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const NEXORA_AUTH_URL="https://nexora-auth.pawaijeanmark17.workers.dev";
 let authMode="login",signedInPhone="";
+
 const coins=[
-{name:"Bitcoin",symbol:"BTC",price:"₱6,120,450",change:"+2.45%",icon:"₿"},{name:"Ethereum",symbol:"ETH",price:"₱212,800",change:"+1.82%",icon:"Ξ"},{name:"Solana",symbol:"SOL",price:"₱8,940",change:"+3.10%",icon:"◎"},{name:"BNB",symbol:"BNB",price:"₱36,500",change:"+0.94%",icon:"◆"},{name:"XRP",symbol:"XRP",price:"₱31.20",change:"+1.12%",icon:"X"},{name:"Cardano",symbol:"ADA",price:"₱22.80",change:"+0.65%",icon:"₳"},{name:"Dogecoin",symbol:"DOGE",price:"₱9.70",change:"+1.43%",icon:"Ð"},{name:"TRON",symbol:"TRX",price:"₱19.10",change:"+0.81%",icon:"T"}];
+{name:"Bitcoin",symbol:"BTC",price:"₱6,120,450",change:"+2.45%",icon:"₿"},
+{name:"Ethereum",symbol:"ETH",price:"₱212,800",change:"+1.82%",icon:"Ξ"},
+{name:"Solana",symbol:"SOL",price:"₱8,940",change:"+3.10%",icon:"◎"},
+{name:"BNB",symbol:"BNB",price:"₱36,500",change:"+0.94%",icon:"◆"},
+{name:"XRP",symbol:"XRP",price:"₱31.20",change:"+1.12%",icon:"X"},
+{name:"Cardano",symbol:"ADA",price:"₱22.80",change:"+0.65%",icon:"₳"},
+{name:"Dogecoin",symbol:"DOGE",price:"₱9.70",change:"+1.43%",icon:"Ð"},
+{name:"TRON",symbol:"TRX",price:"₱19.10",change:"+0.81%",icon:"T"}
+];
+
 const plans=[
-{name:"Starter Plan",crypto:"XRP",fullName:"RIPPLE",icon:"X",amount:200,cycle:7,totalEarn:400,tagline:"Fast. Low cost. Global payments."},
-{name:"Basic Plan",crypto:"DOGE",fullName:"DOGECOIN",icon:"Ð",amount:1000,cycle:14,totalEarn:2000,tagline:"A community-powered digital currency."},
-{name:"Silver Plan",crypto:"ADA",fullName:"CARDANO",icon:"₳",amount:2500,cycle:21,totalEarn:5000,tagline:"Built for a more secure digital future."},
-{name:"Gold Plan",crypto:"TRX",fullName:"TRON",icon:"T",amount:5000,cycle:30,totalEarn:10000,tagline:"Digital content and decentralized apps."},
-{name:"Platinum Plan",crypto:"SOL",fullName:"SOLANA",icon:"◎",amount:10000,cycle:30,totalEarn:20000,tagline:"High-performance blockchain ecosystem."},
-{name:"Diamond Plan",crypto:"BNB",fullName:"BNB",icon:"◆",amount:20000,cycle:45,totalEarn:40000,tagline:"A utility token for a broad ecosystem."},
-{name:"Premium Plan",crypto:"ETH",fullName:"ETHEREUM",icon:"Ξ",amount:50000,cycle:60,totalEarn:100000,tagline:"Programmable blockchain technology."},
-{name:"VIP Plan",crypto:"BTC",fullName:"BITCOIN",icon:"₿",amount:100000,cycle:90,totalEarn:200000,tagline:"The original decentralized cryptocurrency."}];
-function renderCoins(id){document.getElementById(id).innerHTML=coins.map(c=>`<div class="coin"><div class="coin-icon">${c.icon}</div><div class="coin-main"><div class="coin-name">${c.name}</div><div class="coin-symbol">${c.symbol}</div></div><div class="coin-price">${c.price}<div class="coin-change">${c.change}</div></div></div>`).join("")}
-function renderPlanCards(targetId,limit=plans.length){document.getElementById(targetId).innerHTML=plans.slice(0,limit).map(p=>`<article class="crypto-plan"><div class="crypto-plan-head">★ ${p.name.toUpperCase()}</div><div class="crypto-plan-main"><div class="crypto-coin">${p.icon}</div><div class="crypto-info"><h3>${p.crypto}</h3><div class="crypto-fullname">${p.fullName}</div><div class="crypto-tagline">${p.tagline}</div></div></div><div class="crypto-stats"><div class="crypto-stat"><div class="crypto-stat-label">PRICE</div><div class="crypto-stat-value">₱${p.amount.toLocaleString("en-PH")}</div></div><div class="crypto-stat"><div class="crypto-stat-label">CYCLE DAYS</div><div class="crypto-stat-value">${p.cycle} DAYS</div></div><div class="crypto-stat"><div class="crypto-stat-label">TOTAL EARN*</div><div class="crypto-stat-value">₱${p.totalEarn.toLocaleString("en-PH")}</div></div></div><button class="crypto-buy" onclick="alert('Demo only: buying plans and earning returns are disabled.')">🛒 BUY PLAN　➜</button></article>`).join("")}
-function setMode(mode){authMode=mode;document.getElementById("loginTab").classList.toggle("active",mode==="login");document.getElementById("registerTab").classList.toggle("active",mode==="register");document.getElementById("confirmWrap").classList.toggle("hidden",mode!=="register");document.getElementById("invitationWrap").classList.toggle("hidden",mode!=="register");document.getElementById("authSubmit").textContent=mode==="register"?"CREATE ACCOUNT":"LOGIN";document.getElementById("password").autocomplete=mode==="register"?"new-password":"current-password";document.getElementById("authMessage").textContent=""}
-function normalizePhone(v){const p=v.trim().replace(/[\s()-]/g,"");if(!/^09\d{9}$/.test(p))throw new Error("Ibutang ang sakto nga PH number: 09XXXXXXXXX.");return p}
-function showMessage(t,isError=false){const e=document.getElementById("authMessage");e.style.color=isError?"var(--red)":"var(--green)";e.textContent=t}
+{id:"xrp-starter",name:"Starter Plan",crypto:"XRP",fullName:"RIPPLE",icon:"X",amount:200,cycle:7,totalEarn:400,tagline:"Fast. Low cost. Global payments."},
+{id:"doge-basic",name:"Basic Plan",crypto:"DOGE",fullName:"DOGECOIN",icon:"Ð",amount:1000,cycle:7,totalEarn:2000,tagline:"A community-powered digital currency."},
+{id:"ada-silver",name:"Silver Plan",crypto:"ADA",fullName:"CARDANO",icon:"₳",amount:2500,cycle:7,totalEarn:5000,tagline:"Built for a more secure digital future."},
+{id:"trx-gold",name:"Gold Plan",crypto:"TRX",fullName:"TRON",icon:"T",amount:5000,cycle:7,totalEarn:10000,tagline:"Digital content and decentralized apps."},
+{id:"sol-platinum",name:"Platinum Plan",crypto:"SOL",fullName:"SOLANA",icon:"◎",amount:10000,cycle:7,totalEarn:20000,tagline:"High-performance blockchain ecosystem."},
+{id:"bnb-diamond",name:"Diamond Plan",crypto:"BNB",fullName:"BNB",icon:"◆",amount:20000,cycle:7,totalEarn:40000,tagline:"A utility token for a broad ecosystem."},
+{id:"eth-premium",name:"Premium Plan",crypto:"ETH",fullName:"ETHEREUM",icon:"Ξ",amount:50000,cycle:7,totalEarn:100000,tagline:"Programmable blockchain technology."},
+{id:"btc-vip",name:"VIP Plan",crypto:"BTC",fullName:"BITCOIN",icon:"₿",amount:100000,cycle:7,totalEarn:200000,tagline:"The original decentralized cryptocurrency."}
+];
+
+function renderCoins(id){
+  const target=document.getElementById(id);
+  if(!target)return;
+  target.innerHTML=coins.map(c=>`<div class="coin"><div class="coin-icon">${c.icon}</div><div class="coin-main"><div class="coin-name">${c.name}</div><div class="coin-symbol">${c.symbol}</div></div><div class="coin-price">${c.price}<div class="coin-change">${c.change}</div></div></div>`).join("");
+}
+
+function getPlanStorageKey(){
+  return "nexora_selected_plans_" + (signedInPhone || "guest");
+}
+
+function getSelectedPlans(){
+  try{
+    const value=JSON.parse(localStorage.getItem(getPlanStorageKey())||"[]");
+    return Array.isArray(value)?value:[];
+  }catch(error){
+    return [];
+  }
+}
+
+function saveSelectedPlans(ids){
+  localStorage.setItem(getPlanStorageKey(),JSON.stringify(ids));
+}
+
+function buyPlan(planId){
+  const plan=plans.find(p=>p.id===planId);
+  if(!plan)return;
+
+  if(!signedInPhone){
+    alert("Please log in before selecting a plan.");
+    return;
+  }
+
+  const selected=getSelectedPlans();
+  if(selected.includes(planId)){
+    alert("This plan is already in My Plans.");
+    return;
+  }
+
+  selected.push(planId);
+  saveSelectedPlans(selected);
+  renderMyPlans();
+  alert(plan.crypto+" added to My Plans. Demo only; no payment was made.");
+}
+
+function removePlan(planId){
+  saveSelectedPlans(getSelectedPlans().filter(id=>id!==planId));
+  renderMyPlans();
+}
+
+function planCard(p,isMyPlan=false){
+  return `
+    <article class="crypto-plan">
+      <div class="crypto-plan-head">★ ${p.name.toUpperCase()}</div>
+      <div class="crypto-plan-main">
+        <div class="crypto-coin">${p.icon}</div>
+        <div class="crypto-info">
+          <h3>${p.crypto}</h3>
+          <div class="crypto-fullname">${p.fullName}</div>
+          <div class="crypto-tagline">${p.tagline}</div>
+        </div>
+      </div>
+      <div class="crypto-stats">
+        <div class="crypto-stat"><div class="crypto-stat-label">PRICE</div><div class="crypto-stat-value">₱${p.amount.toLocaleString("en-PH")}</div></div>
+        <div class="crypto-stat"><div class="crypto-stat-label">CYCLE DAYS</div><div class="crypto-stat-value">${p.cycle} DAYS</div></div>
+        <div class="crypto-stat"><div class="crypto-stat-label">TOTAL EARN*</div><div class="crypto-stat-value">₱${p.totalEarn.toLocaleString("en-PH")}</div></div>
+      </div>
+      ${isMyPlan
+        ? `<button class="secondary" style="width:100%" onclick="removePlan('${p.id}')">REMOVE FROM MY PLANS</button>`
+        : `<button class="crypto-buy" onclick="buyPlan('${p.id}')">🛒 BUY PLAN ➜</button>`
+      }
+    </article>`;
+}
+
+function renderPlanCards(targetId){
+  const target=document.getElementById(targetId);
+  if(target)target.innerHTML=plans.map(p=>planCard(p,false)).join("");
+}
+
+function renderMyPlans(){
+  const list=document.getElementById("plansList");
+  if(!list)return;
+
+  const selected=getSelectedPlans();
+  const chosen=plans.filter(p=>selected.includes(p.id));
+  list.innerHTML=chosen.map(p=>planCard(p,true)).join("");
+
+  const empty=document.getElementById("myPlansEmpty");
+  if(empty)empty.classList.toggle("hidden",chosen.length>0);
+}
+
+function setMode(mode){
+  authMode=mode;
+  document.getElementById("loginTab").classList.toggle("active",mode==="login");
+  document.getElementById("registerTab").classList.toggle("active",mode==="register");
+  document.getElementById("confirmWrap").classList.toggle("hidden",mode!=="register");
+  document.getElementById("invitationWrap").classList.toggle("hidden",mode!=="register");
+  document.getElementById("authSubmit").textContent=mode==="register"?"CREATE ACCOUNT":"LOGIN";
+  document.getElementById("password").autocomplete=mode==="register"?"new-password":"current-password";
+  document.getElementById("authMessage").textContent="";
+}
+
+function normalizePhone(v){
+  const p=v.trim().replace(/[\s()-]/g,"");
+  if(!/^09\d{9}$/.test(p))throw new Error("Ibutang ang sakto nga PH number: 09XXXXXXXXX.");
+  return p;
+}
+
+function showMessage(t,isError=false){
+  const e=document.getElementById("authMessage");
+  e.style.color=isError?"var(--red)":"var(--green)";
+  e.textContent=t;
+}
+
 document.getElementById("authForm").addEventListener("submit",async event=>{
-event.preventDefault();const button=document.getElementById("authSubmit");button.disabled=true;showMessage("Please wait...");
-try{
-const phone=normalizePhone(document.getElementById("mobile").value),password=document.getElementById("password").value;
-if(password.length<8)throw new Error("Password kinahanglan labing menos 8 characters.");
-const payload={phone,password};let endpoint="/login";
-if(authMode==="register"){const confirmPassword=document.getElementById("confirmPassword").value;if(password!==confirmPassword)throw new Error("Dili pareho ang passwords.");payload.confirmPassword=confirmPassword;payload.invitationCode=document.getElementById("invitationCode").value.trim();endpoint="/register"}
-const response=await fetch(NEXORA_AUTH_URL+endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-let result;try{result=await response.json()}catch(_){throw new Error("Dili mabasa ang tubag sa Worker. Susiha ang nexora-auth deployment.")}
-if(!response.ok||!result.success)throw new Error(result.error||`Authentication failed (${response.status}).`);
-if(!result.access_token||!result.refresh_token)throw new Error("Walay session tokens gikan sa Worker. Susiha ang Worker code ug secrets.");
-const {error}=await supabaseClient.auth.setSession({access_token:result.access_token,refresh_token:result.refresh_token});if(error)throw error;
-signedInPhone=phone;await openDashboard(result.user,phone);
-}catch(err){showMessage(err.message||"Naay error. Sulayi pag-usab.",true)}finally{button.disabled=false}
+  event.preventDefault();
+  const button=document.getElementById("authSubmit");
+  button.disabled=true;
+  showMessage("Please wait...");
+
+  try{
+    const phone=normalizePhone(document.getElementById("mobile").value);
+    const password=document.getElementById("password").value;
+    if(password.length<8)throw new Error("Password kinahanglan labing menos 8 characters.");
+
+    const payload={phone,password};
+    let endpoint="/login";
+
+    if(authMode==="register"){
+      const confirmPassword=document.getElementById("confirmPassword").value;
+      if(password!==confirmPassword)throw new Error("Dili pareho ang passwords.");
+      payload.confirmPassword=confirmPassword;
+      payload.invitationCode=document.getElementById("invitationCode").value.trim();
+      endpoint="/register";
+    }
+
+    const response=await fetch(NEXORA_AUTH_URL+endpoint,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+
+    let result;
+    try{
+      result=await response.json();
+    }catch(_){
+      throw new Error("Dili mabasa ang tubag sa Worker. Susiha ang nexora-auth deployment.");
+    }
+
+    if(!response.ok||!result.success)throw new Error(result.error||`Authentication failed (${response.status}).`);
+    if(!result.access_token||!result.refresh_token)throw new Error("Walay session tokens gikan sa Worker. Susiha ang Worker code ug secrets.");
+
+    const {error}=await supabaseClient.auth.setSession({
+      access_token:result.access_token,
+      refresh_token:result.refresh_token
+    });
+    if(error)throw error;
+
+    signedInPhone=phone;
+    await openDashboard(result.user,phone);
+  }catch(err){
+    showMessage(err.message||"Naay error. Sulayi pag-usab.",true);
+  }finally{
+    button.disabled=false;
+  }
 });
-async function openDashboard(user,phoneOverride=""){const phone=phoneOverride||user?.user_metadata?.mobile_number||user?.phone||signedInPhone||"";signedInPhone=phone;document.getElementById("authScreen").classList.add("hidden");document.getElementById("app").classList.remove("hidden");document.getElementById("bottomNav").classList.remove("hidden");document.getElementById("profilePhone").textContent=phone||"—";document.getElementById("welcomeText").textContent=phone?"Welcome back, "+phone:"Welcome back";showPage("home")}
-function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===id));window.scrollTo({top:0,behavior:"smooth"})}
-async function logout(){const {error}=await supabaseClient.auth.signOut();if(error){alert(error.message);return}signedInPhone="";location.reload()}
-async function copyReferral(){try{await navigator.clipboard.writeText(document.getElementById("refCode").textContent);alert("Demo referral code copied.")}catch(_){alert("Referral code: NEXORA-DEMO")}}
-async function shareReferral(){const text="Check out NEXORA demo. Referral code: NEXORA-DEMO";if(navigator.share){try{await navigator.share({title:"NEXORA",text})}catch(_){}}else await copyReferral()}
-function renderMarketTicker(){const track=document.getElementById("marketTrack");const items=coins.map(c=>`<div class="market-item"><div class="market-dot">${c.icon}</div><div class="market-info"><div class="market-name">${c.name}</div><div class="market-symbol">${c.symbol}</div></div><div class="market-value">${c.price}<div class="market-change">${c.change}</div></div></div>`).join("");track.innerHTML=items+items}
-async function init(){renderMarketTicker();renderPlanCards("homePlans",3);renderPlanCards("plansList");const {data,error}=await supabaseClient.auth.getSession();if(error){showMessage(error.message,true);return}if(data.session?.user)await openDashboard(data.session.user)}
-supabaseClient.auth.onAuthStateChange((_event,session)=>{if(!session){document.getElementById("app").classList.add("hidden");document.getElementById("bottomNav").classList.add("hidden");document.getElementById("authScreen").classList.remove("hidden")}});
+
+async function openDashboard(user,phoneOverride=""){
+  const phone=phoneOverride||user?.user_metadata?.mobile_number||user?.phone||signedInPhone||"";
+  signedInPhone=phone;
+
+  document.getElementById("authScreen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("bottomNav").classList.remove("hidden");
+  document.getElementById("profilePhone").textContent=phone||"—";
+  document.getElementById("welcomeText").textContent=phone?"Welcome back, "+phone:"Welcome back";
+
+  renderMyPlans();
+  showPage("home");
+}
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function logout(){
+  const {error}=await supabaseClient.auth.signOut();
+  if(error){alert(error.message);return;}
+  signedInPhone="";
+  location.reload();
+}
+
+async function copyReferral(){
+  try{
+    await navigator.clipboard.writeText(document.getElementById("refCode").textContent);
+    alert("Demo referral code copied.");
+  }catch(_){
+    alert("Referral code: NEXORA-DEMO");
+  }
+}
+
+async function shareReferral(){
+  const text="Check out NEXORA demo. Referral code: NEXORA-DEMO";
+  if(navigator.share){
+    try{await navigator.share({title:"NEXORA",text});}catch(_){}
+  }else{
+    await copyReferral();
+  }
+}
+
+function renderMarketTicker(){
+  const track=document.getElementById("marketTrack");
+  const items=coins.map(c=>`<div class="market-item"><div class="market-dot">${c.icon}</div><div class="market-info"><div class="market-name">${c.name}</div><div class="market-symbol">${c.symbol}</div></div><div class="market-value">${c.price}<div class="market-change">${c.change}</div></div></div>`).join("");
+  track.innerHTML=items+items;
+}
+
+async function init(){
+  renderMarketTicker();
+  renderPlanCards("homePlans");
+  renderMyPlans();
+
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error){
+    showMessage(error.message,true);
+    return;
+  }
+
+  if(data.session?.user){
+    const user=data.session.user;
+    const phone=user?.user_metadata?.mobile_number||user?.phone||"";
+    await openDashboard(user,phone);
+  }
+}
+
+supabaseClient.auth.onAuthStateChange((_event,session)=>{
+  if(!session){
+    signedInPhone="";
+    document.getElementById("app").classList.add("hidden");
+    document.getElementById("bottomNav").classList.add("hidden");
+    document.getElementById("authScreen").classList.remove("hidden");
+  }
+});
+
 init();
-</script></body></html>
+</script>
+</body>
+                                                                                                                                                               </html>
