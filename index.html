@@ -134,7 +134,7 @@ h3{font-size:15px;margin:0 0 8px}
 <div class="balance-card"><div class="label">DEMO TOTAL BALANCE</div><div class="balance">₱2,560.00</div><div class="positive">▲ Demo account overview</div></div>
 <div class="quick-grid">
 <button class="quick" onclick="showPage('wallet')"><span>＋</span>Deposit</button>
-<button class="quick" onclick="showPage('wallet')"><span>↗</span>Withdraw</button>
+<button class="quick" onclick="showPage('withdrawal')"><span>↗</span>Withdraw</button>
 <button class="quick" onclick="showPage('plans')"><span>▣</span>My Plans</button>
 <button class="quick" onclick="showPage('referral')"><span>♧</span>Invite</button>
 </div>
@@ -282,20 +282,74 @@ h3{font-size:15px;margin:0 0 8px}
     </div>
   </div>
 
-  <!-- WITHDRAWAL -->
+
+</section>
+  <!-- SEPARATE WITHDRAWAL PAGE -->
+<section id="withdrawal" class="page">
+  <h1>Withdrawal</h1>
+  <p class="muted">Withdraw funds · Demo only</p>
+
   <div class="profile-card">
-    <h2>Withdrawal</h2>
+    <h2>Withdrawal Details</h2>
 
-    <div class="row">
-      <span>Withdrawal Status</span>
-      <span class="pill">Not connected</span>
+    <form id="withdrawalForm">
+      <label for="withdrawAmount">Withdrawal Amount (₱)</label>
+      <input
+        type="number"
+        id="withdrawAmount"
+        name="withdrawAmount"
+        placeholder="Enter amount"
+        min="1"
+        step="0.01"
+        required
+        style="width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;border-radius:8px;"
+      >
+
+      <label for="withdrawNumber">GCash / Payment Number</label>
+      <input
+        type="tel"
+        id="withdrawNumber"
+        name="withdrawNumber"
+        placeholder="Enter payment number"
+        maxlength="20"
+        required
+        style="width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;border-radius:8px;"
+      >
+
+      <button
+        type="submit"
+        class="primary"
+        style="width:100%;padding:14px;border:0;border-radius:10px;cursor:pointer;"
+      >
+        SUBMIT WITHDRAWAL
+      </button>
+
+      <p id="withdrawMessage" role="status" style="display:none;margin-top:15px;"></p>
+    </form>
+
+    <div class="notice" style="margin-top:18px;">
+      DEMO ONLY: Withdrawal is not connected to a payment system.
+      No money will be transferred and no balance will be deducted.
     </div>
-
-    <p class="muted">
-      Withdrawal processing is not configured.
-    </p>
   </div>
 </section>
+
+<script>
+(function () {
+  const form = document.getElementById("withdrawalForm");
+  const message = document.getElementById("withdrawMessage");
+
+  if (!form || !message) return;
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    message.style.display = "block";
+    message.textContent =
+      "Demo only: Withdrawal processing is not configured.";
+  });
+})();
+</script>
 
 <script>
 (function () {
