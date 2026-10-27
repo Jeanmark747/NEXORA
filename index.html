@@ -492,18 +492,70 @@ h3{font-size:15px;margin:0 0 8px}
     preview.style.display = "block";
   });
 
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
+  form.addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    message.style.display = "block";
-    message.style.background = "#fff3cd";
-    message.style.color = "#664d03";
+  message.style.display = "block";
+  message.style.background = "#fff3cd";
+  message.style.color = "#664d03";
+  message.textContent = "Submitting deposit request...";
 
+  try {
+    const amount = document.getElementById("depositAmount").value;
+    const senderName = document.getElementById("senderNumber").value.trim();
+    const receipt = document.getElementById("depositReceipt").files[0];
+
+    if (!receipt) {
+      throw new Error("Please select your payment receipt.");
+    }
+
+    if (receipt.size > 5 * 1024 * 1024) {
+      throw new Error("Receipt image must be 5 MB or smaller.");
+    }
+
+    if (!receipt.type.startsWith("image/")) {
+      throw new Error("Please upload an image receipt.");
+    }
+
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (!session || !session.access_token) {
+      throw new Error("Please log in again before submitting.");
+    }
+
+    const formData = new FormData();
+    formData.append("amount", amount);
+    formData.append("senderName", senderName);
+    formData.append("receipt", receipt);
+
+    const response = await fetch(
+      NEXORA_AUTH_URL + "/deposit/submit",
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + session.access_token
+        },
+        body: formData
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Deposit submission failed.");
+    }
+
+    message.style.background = "#d1e7dd";
+    message.style.color = "#0f5132";
     message.textContent =
-      "Demo only: Your deposit has NOT been submitted or verified. " +
-      "Receipt upload and deposit processing need a backend.";
+      "Deposit request submitted! Please wait for admin verification.";
 
-  });
+  } catch (error) {
+    message.style.background = "#f8d7da";
+    message.style.color = "#842029";
+    message.textContent = error.message || "Something went wrong.";
+  }
+});
 })();
 </script>
 <section id="profile" class="page">
