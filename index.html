@@ -164,33 +164,32 @@ h3{font-size:15px;margin:0 0 8px}
 <section id="history" class="page"><h1>Transaction History</h1><div class="empty">No transactions yet.<br><br>This demo does not process real payments.</div></section>
 <section id="wallet" class="page">
   <h1>Wallet</h1>
-  <p class="muted">Demo wallet overview</p>
+  <p class="muted">Manage your demo deposits</p>
 
+  <!-- DEMO BALANCE -->
   <div class="balance-card">
     <div class="label">DEMO BALANCE</div>
     <div class="balance">₱2,560.00</div>
     <div class="positive">Preview only · No real funds</div>
   </div>
 
+  <!-- DEPOSIT FORM -->
   <div class="profile-card">
     <h2>Deposit via QRPH</h2>
+
     <p class="muted">
-      Scan the QRPH code using a compatible payment app.
-      Verify the recipient details before making any payment.
+      Scan the QRPH code, complete your payment outside NEXORA,
+      then fill out the form below.
     </p>
 
+    <!-- QRPH IMAGE -->
     <div style="background:#fff;border-radius:16px;padding:14px;text-align:center;margin:16px 0;">
       <img
-        id="qrphImage"
         src="https://raw.githubusercontent.com/Jeanmark747/Growrise/refs/heads/main/qr_20d8d72d4dead69dd20f5db7%2520(1)-2.jpg"
-        alt="QRPH payment code"
+        alt="QRPH Code"
         style="display:block;width:100%;max-width:320px;height:auto;margin:auto;border-radius:8px;"
-        onerror="this.style.display='none';document.getElementById('qrphError').style.display='block';"
+        onerror="this.alt='QRPH image failed to load';this.style.display='none';"
       >
-
-      <p id="qrphError" style="display:none;color:#b00020;font-size:13px;">
-        Dili ma-load ang QRPH image. Susiha ang image link.
-      </p>
     </div>
 
     <a
@@ -198,29 +197,159 @@ h3{font-size:15px;margin:0 0 8px}
       target="_blank"
       rel="noopener"
       class="primary"
-      style="display:block;text-align:center;text-decoration:none;"
-    >OPEN QR IMAGE</a>
+      style="display:block;text-align:center;text-decoration:none;margin-bottom:20px;"
+    >OPEN QRPH</a>
 
-    <div class="notice">
-      DEMO NOTICE: Susiha una ang ngalan sa recipient ug payment details.
-      Dili awtomatikong ma-confirm sa NEXORA ang imong payment.
+    <hr style="border:0;border-top:1px solid #ddd;margin:20px 0;">
+
+    <h2>Deposit Details</h2>
+
+    <form id="depositForm">
+
+      <!-- DEPOSIT AMOUNT -->
+      <label for="depositAmount">Deposit Amount (₱)</label>
+      <input
+        type="number"
+        id="depositAmount"
+        name="depositAmount"
+        placeholder="Enter deposit amount"
+        min="1"
+        step="0.01"
+        required
+        style="width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;border-radius:8px;"
+      >
+
+      <!-- SENDER NUMBER -->
+      <label for="senderNumber">Sender Number</label>
+      <input
+        type="tel"
+        id="senderNumber"
+        name="senderNumber"
+        placeholder="Enter your payment number"
+        required
+        maxlength="20"
+        style="width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;border-radius:8px;"
+      >
+
+      <!-- UPLOAD RECEIPT -->
+      <label for="depositReceipt">Upload Payment Receipt</label>
+
+      <div style="border:2px dashed #888;border-radius:12px;padding:18px;text-align:center;margin:8px 0 16px;">
+        <div style="font-size:32px;">📄</div>
+
+        <p class="muted">
+          Upload a screenshot or photo of your receipt.
+        </p>
+
+        <input
+          type="file"
+          id="depositReceipt"
+          name="depositReceipt"
+          accept="image/*"
+          required
+          style="width:100%;"
+        >
+
+        <img
+          id="receiptPreview"
+          alt="Receipt preview"
+          style="display:none;width:100%;max-width:300px;height:auto;margin:15px auto 0;border-radius:8px;"
+        >
+      </div>
+
+      <!-- SUBMIT -->
+      <button
+        type="submit"
+        class="primary"
+        style="width:100%;padding:14px;border:0;border-radius:10px;cursor:pointer;"
+      >
+        SUBMIT DEPOSIT
+      </button>
+
+      <p
+        id="depositMessage"
+        role="status"
+        style="display:none;margin-top:15px;padding:12px;border-radius:8px;"
+      ></p>
+
+    </form>
+
+    <div class="notice" style="margin-top:18px;">
+      <strong>DEMO NOTICE:</strong>
+      This form is a visual demo only. Submitting it will not process
+      a payment, save your receipt to a server, or update your balance.
+      Never submit a real payment until the payment process is verified.
     </div>
   </div>
 
+  <!-- WITHDRAWAL -->
   <div class="profile-card">
     <h2>Withdrawal</h2>
 
     <div class="row">
-      <span>Withdrawal status</span>
+      <span>Withdrawal Status</span>
       <span class="pill">Not connected</span>
     </div>
 
     <p class="muted">
       Withdrawal processing is not configured.
-      Walay real funds nga gi-handle niini nga demo website.
     </p>
   </div>
 </section>
+
+<script>
+(function () {
+  const receiptInput = document.getElementById("depositReceipt");
+  const preview = document.getElementById("receiptPreview");
+  const form = document.getElementById("depositForm");
+  const message = document.getElementById("depositMessage");
+
+  let previewUrl = null;
+
+  receiptInput.addEventListener("change", function () {
+    const file = this.files && this.files[0];
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      previewUrl = null;
+    }
+
+    preview.style.display = "none";
+    preview.removeAttribute("src");
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      this.value = "";
+      alert("Please upload an image of your receipt.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      this.value = "";
+      alert("Receipt image must be 5 MB or smaller.");
+      return;
+    }
+
+    previewUrl = URL.createObjectURL(file);
+    preview.src = previewUrl;
+    preview.style.display = "block";
+  });
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    message.style.display = "block";
+    message.style.background = "#fff3cd";
+    message.style.color = "#664d03";
+
+    message.textContent =
+      "Demo only: Your deposit has NOT been submitted or verified. " +
+      "Receipt upload and deposit processing need a backend.";
+
+  });
+})();
+</script>
 <section id="profile" class="page">
 <h1>My Profile</h1>
 <div class="profile-card"><div class="profile-row"><span>Platform</span><strong>NEXORA</strong></div><div class="profile-row"><span>Mobile number</span><strong id="profilePhone">—</strong></div><div class="profile-row"><span>Account status</span><strong style="color:var(--green)">Signed in</strong></div></div>
