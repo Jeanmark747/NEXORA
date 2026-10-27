@@ -157,14 +157,17 @@ h3{font-size:15px;margin:0 0 8px}
 <section id="home" class="page active">
 <div class="welcome" id="welcomeText">Welcome back</div>
 <h1>Dashboard</h1>
-<div class="balance-card"><div class="label">DEMO TOTAL BALANCE</div><div class="balance">₱2,560.00</div><div class="positive">▲ Demo account overview</div></div>
+<div class="balance-card">
+  <div class="label">TOTAL BALANCE</div>
+  <div class="balance">₱0.00</div>
+</div>
 <div class="quick-grid">
 <button class="quick" onclick="showPage('wallet')"><span>＋</span>Deposit</button>
 <button class="quick" onclick="showPage('withdrawal')"><span>↗</span>Withdraw</button>
 <button class="quick" onclick="showPage('plans')"><span>▣</span>My Plans</button>
 <button class="quick" onclick="showPage('referral')"><span>♧</span>Invite</button>
 </div>
-<div class="section-head"><h2>Market Overview</h2><span class="muted">Moving · Sample data</span></div>
+<div class="section-head"><h2>Market Overview</h2><span class="muted">Market Overview</span></div>
 <div class="market-shell"><div id="marketTrack" class="market-track"></div></div>
 <div class="section-head"><h2>All Plans</h2><button class="secondary" onclick="showPage('plans')">My Plans</button></div>
 <div id="homePlans" class="plan-list"></div>
@@ -250,12 +253,7 @@ h3{font-size:15px;margin:0 0 8px}
   <h1>Wallet</h1>
   <p class="muted">Manage your demo deposits</p>
 
-  <!-- DEMO BALANCE -->
-  <div class="balance-card">
-    <div class="label">DEMO BALANCE</div>
-    <div class="balance">₱2,560.00</div>
-    <div class="positive">Preview only · No real funds</div>
-  </div>
+ 
 
   <!-- DEPOSIT FORM -->
   <div class="profile-card">
