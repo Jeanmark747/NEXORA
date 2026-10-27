@@ -179,47 +179,69 @@ h3{font-size:15px;margin:0 0 8px}
 <div class="notice">Illustrative plans and total-earn figures only. No deposit, purchase, or earnings are processed; displayed amounts are not guaranteed returns.</div>
 </section>
 
+
 <section id="referral" class="page">
   <h1>Referral</h1>
-  <p class="muted">Invite friends and track your referral network.</p>  <div class="profile-card">
+  <p class="muted">Invite friends and track your referral network.</p>
+
+  <div class="profile-card">
     <h3>Your Referral Code</h3>
     <div class="ref-box">
-      <strong id="refCode">NEXORA-DEMO</strong>
+      <strong id="refCode">Loading...</strong>
       <button class="secondary" onclick="copyReferral()">Copy</button>
     </div>
+
     <button class="secondary" style="width:100%;margin-top:12px"
       onclick="shareReferral()">Share Invite</button>
-  </div>  <h3 style="margin-top:24px">Referral Network</h3>  <div class="referral-levels">
+
+    <div class="field">
+      <label for="referralLink">YOUR REFERRAL LINK</label>
+      <input id="referralLink" type="text" readonly
+        placeholder="Loading referral link...">
+      <button class="secondary" style="width:100%;margin-top:8px"
+        onclick="copyReferralLink()">Copy Referral Link</button>
+    </div>
+  </div>
+
+  <h3 style="margin-top:24px">Referral Network</h3>
+
+  <div class="referral-levels">
     <button class="profile-card referral-level" onclick="showReferralLevel(1)">
       <span>🟢 Level 1 — 15%</span>
       <strong id="level1Count">0</strong>
       <small>Direct Referrals</small>
       <span>View Members →</span>
-    </button><button class="profile-card referral-level" onclick="showReferralLevel(2)">
-  <span>🔵 Level 2 — 5%</span>
-  <strong id="level2Count">0</strong>
-  <small>Second Level</small>
-  <span>View Members →</span>
-</button>
+    </button>
 
-<button class="profile-card referral-level" onclick="showReferralLevel(3)">
-  <span>🟣 Level 3 — 1%</span>
-  <strong id="level3Count">0</strong>
-  <small>Third Level</small>
-  <span>View Members →</span>
-</button>
+    <button class="profile-card referral-level" onclick="showReferralLevel(2)">
+      <span>🔵 Level 2 — 5%</span>
+      <strong id="level2Count">0</strong>
+      <small>Second Level</small>
+      <span>View Members →</span>
+    </button>
 
-  </div>  <div id="referralMembers" class="profile-card"
+    <button class="profile-card referral-level" onclick="showReferralLevel(3)">
+      <span>🟣 Level 3 — 1%</span>
+      <strong id="level3Count">0</strong>
+      <small>Third Level</small>
+      <span>View Members →</span>
+    </button>
+  </div>
+
+  <div id="referralMembers" class="profile-card"
     style="margin-top:16px;display:none">
-    <h3 id="referralMembersTitle">Level 1 Members</h3>
+    <h3 id="referralMembersTitle">Referral Members</h3>
     <div id="referralMembersList">
-      <p class="muted">No referrals yet.</p>
+      <p class="muted">Select a referral level.</p>
     </div>
-  </div>  <p class="muted" style="margin-top:16px">
-    Referral counts and member lists will appear when connected
-    to actual registered referral records.
+  </div>
+
+  <p class="muted" style="margin-top:16px">
+    Referral counts are loaded from registered Supabase profiles.
+    Commission payments and member details are not configured.
   </p>
 </section>
+
 
 
 
@@ -620,6 +642,7 @@ function renderMyPlans(){
   if(empty)empty.classList.toggle("hidden",chosen.length>0);
 }
 
+
 function setMode(mode){
   authMode=mode;
   document.getElementById("loginTab").classList.toggle("active",mode==="login");
@@ -629,7 +652,16 @@ function setMode(mode){
   document.getElementById("authSubmit").textContent=mode==="register"?"CREATE ACCOUNT":"LOGIN";
   document.getElementById("password").autocomplete=mode==="register"?"new-password":"current-password";
   document.getElementById("authMessage").textContent="";
+
+  if(mode==="register"){
+    const params=new URLSearchParams(window.location.search);
+    const referralCode=params.get("ref");
+    if(referralCode){
+      document.getElementById("invitationCode").value=referralCode;
+    }
+  }
 }
+
 
 function normalizePhone(v){
   const p=v.trim().replace(/[\s()-]/g,"");
@@ -706,7 +738,8 @@ async function openDashboard(user,phoneOverride=""){
   document.getElementById("profilePhone").textContent=phone||"—";
   document.getElementById("welcomeText").textContent=phone?"Welcome back, "+phone:"Welcome back";
 
-  renderMyPlans();
+    renderMyPlans();
+  await loadReferralData();
   showPage("home");
 }
 
@@ -723,24 +756,131 @@ async function logout(){
   location.reload();
 }
 
-async function copyReferral(){
-  try{
-    await navigator.clipboard.writeText(document.getElementById("refCode").textContent);
-    alert("Demo referral code copied.");
-  }catch(_){
-    alert("Referral code: NEXORA-DEMO");
+
+
+
+let currentReferralCode = "";
+let currentReferralData = null;
+
+async function loadReferralData() {
+  const codeEl = document.getElementById("refCode");
+  const linkEl = document.getElementById("referralLink");
+
+  const counts = [
+    document.getElementById("level1Count"),
+    document.getElementById("level2Count"),
+    document.getElementById("level3Count")
+  ];
+
+  try {
+    const { data: sessionData, error: sessionError } =
+      await supabaseClient.auth.getSession();
+
+    if (sessionError) throw sessionError;
+    if (!sessionData.session) {
+      throw new Error("Please log in again.");
+    }
+
+    const { data, error } = await supabaseClient.rpc(
+      "get_nexora_referrals"
+    );
+
+    if (error) throw error;
+
+    currentReferralData = data;
+    currentReferralCode = data.referral_code || "";
+
+    codeEl.textContent =
+      currentReferralCode || "No referral code";
+
+    counts[0].textContent = data.level1_count ?? 0;
+    counts[1].textContent = data.level2_count ?? 0;
+    counts[2].textContent = data.level3_count ?? 0;
+
+    if (linkEl) linkEl.value = getReferralLink();
+
+    return data;
+  } catch (error) {
+    console.error("Referral loading error:", error);
+    codeEl.textContent = "Unable to load code";
+    if (linkEl) linkEl.value = "";
+
+    counts.forEach(el => el.textContent = "—");
+    return null;
   }
 }
 
-async function shareReferral(){
-  const text="Check out NEXORA demo. Referral code: NEXORA-DEMO";
-  if(navigator.share){
-    try{await navigator.share({title:"NEXORA",text});}catch(_){}
-  }else{
-    await copyReferral();
+function getReferralLink() {
+  if (!currentReferralCode) return "";
+
+  const url = new URL(window.location.href);
+  url.search = "";
+  url.hash = "";
+  url.searchParams.set("ref", currentReferralCode);
+
+  return url.toString();
+}
+
+async function copyReferral() {
+  if (!currentReferralCode) {
+    alert("Referral code is not loaded yet.");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(currentReferralCode);
+    alert("Referral code copied!");
+  } catch {
+    prompt("Copy your referral code:", currentReferralCode);
   }
 }
-  function showReferralLevel(level) {
+
+async function copyReferralLink() {
+  const link = getReferralLink();
+
+  if (!link) {
+    alert("Referral link is not ready yet.");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(link);
+    alert("Referral link copied!");
+  } catch {
+    prompt("Copy your referral link:", link);
+  }
+}
+
+async function shareReferral() {
+  const link = getReferralLink();
+
+  if (!link) {
+    alert("Referral link is not ready yet.");
+    return;
+  }
+
+  const text =
+    "Join NEXORA using my invitation code: " +
+    currentReferralCode;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "NEXORA Invitation",
+        text,
+        url: link
+      });
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("Share failed:", error);
+      }
+    }
+  } else {
+    await copyReferralLink();
+  }
+}
+
+function showReferralLevel(level) {
   const panel = document.getElementById("referralMembers");
   const title = document.getElementById("referralMembersTitle");
   const list = document.getElementById("referralMembersList");
@@ -748,10 +888,10 @@ async function shareReferral(){
   if (!panel || !title || !list) return;
 
   title.textContent = `Level ${level} Members`;
-
   list.innerHTML = `
     <p class="muted">
-      Ang actual referral records wala pa makonektar.
+      Referral counts are connected. The detailed member list
+      still needs a secure backend endpoint.
     </p>
   `;
 
@@ -760,7 +900,9 @@ async function shareReferral(){
     behavior: "smooth",
     block: "nearest"
   });
-  }
+}
+
+  
 
 function renderMarketTicker(){
   const track=document.getElementById("marketTrack");
