@@ -285,7 +285,7 @@ h3{font-size:15px;margin:0 0 8px}
 
 </section>
   <!-- SEPARATE WITHDRAWAL PAGE -->
-<section id="withdrawal" class="page">
+  <section id="withdrawal" class="page">
   <h1>Withdrawal</h1>
   <p class="muted">Withdraw funds · Demo only</p>
 
@@ -293,43 +293,62 @@ h3{font-size:15px;margin:0 0 8px}
     <h2>Withdrawal Details</h2>
 
     <form id="withdrawalForm">
-      <label for="withdrawAmount">Withdrawal Amount (₱)</label>
+      <label for="withdrawAmount">WITHDRAW AMOUNT (₱)</label>
       <input
         type="number"
         id="withdrawAmount"
         name="withdrawAmount"
-        placeholder="Enter amount"
+        placeholder="Enter withdrawal amount"
         min="1"
         step="0.01"
         required
-        style="width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;border-radius:8px;"
+        style="width:100%;padding:12px;margin:8px 0 16px;border-radius:8px;"
       >
 
-      <label for="withdrawNumber">GCash / Payment Number</label>
+      <label for="paymentMethod">MODE OF PAYMENT</label>
+      <select
+        id="paymentMethod"
+        name="paymentMethod"
+        required
+        style="width:100%;padding:12px;margin:8px 0 16px;border-radius:8px;"
+      >
+        <option value="">Select payment method</option>
+        <option value="GCash">GCash</option>
+        <option value="Maya">Maya</option>
+      </select>
+
+      <label for="accountName">ACCOUNT NAME</label>
+      <input
+        type="text"
+        id="accountName"
+        name="accountName"
+        placeholder="Enter account name"
+        required
+        style="width:100%;padding:12px;margin:8px 0 16px;border-radius:8px;"
+      >
+
+      <label for="accountNumber">ACCOUNT NUMBER</label>
       <input
         type="tel"
-        id="withdrawNumber"
-        name="withdrawNumber"
-        placeholder="Enter payment number"
+        id="accountNumber"
+        name="accountNumber"
+        placeholder="Enter GCash or Maya number"
+        inputmode="numeric"
         maxlength="20"
         required
-        style="width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;border-radius:8px;"
+        style="width:100%;padding:12px;margin:8px 0 16px;border-radius:8px;"
       >
 
-      <button
-        type="submit"
-        class="primary"
-        style="width:100%;padding:14px;border:0;border-radius:10px;cursor:pointer;"
-      >
+      <button type="submit" class="primary">
         SUBMIT WITHDRAWAL
       </button>
 
       <p id="withdrawMessage" role="status" style="display:none;margin-top:15px;"></p>
     </form>
 
-    <div class="notice" style="margin-top:18px;">
-      DEMO ONLY: Withdrawal is not connected to a payment system.
-      No money will be transferred and no balance will be deducted.
+    <div class="notice">
+      DEMO ONLY: No real money will be transferred.
+      Withdrawal processing is not configured.
     </div>
   </div>
 </section>
@@ -350,6 +369,7 @@ h3{font-size:15px;margin:0 0 8px}
   });
 })();
 </script>
+
 
 <script>
 (function () {
