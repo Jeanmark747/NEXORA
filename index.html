@@ -101,6 +101,32 @@ h3{font-size:15px;margin:0 0 8px}
 .crypto-buy:active{transform:scale(.99)}
 .empty{text-align:center;padding:22px;color:var(--muted);font-size:13px}
 @media(min-width:600px){.app{border-left:1px solid #112b1d;border-right:1px solid #112b1d}}
+
+.referral-levels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.referral-level {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.referral-level strong {
+  font-size: 28px;
+}
+
+.referral-level small {
+  color: #9ab6a5;
+}
 </style>
 </head>
 <body>
@@ -154,9 +180,45 @@ h3{font-size:15px;margin:0 0 8px}
 </section>
 
 <section id="referral" class="page">
-<h1>Referral</h1><p class="muted">Invite friends to preview the referral page.</p>
-<div class="profile-card"><h3>Your demo referral code</h3><div class="ref-box"><strong id="refCode">NEXORA-DEMO</strong><button class="secondary" onclick="copyReferral()">Copy</button></div><p class="muted">Demo code only. Referral tracking and rewards are not active.</p></div>
-<button class="secondary" style="width:100%" onclick="shareReferral()">Share invite</button>
+  <h1>Referral</h1>
+  <p class="muted">Invite friends and track your referral network.</p>  <div class="profile-card">
+    <h3>Your Referral Code</h3>
+    <div class="ref-box">
+      <strong id="refCode">NEXORA-DEMO</strong>
+      <button class="secondary" onclick="copyReferral()">Copy</button>
+    </div>
+    <button class="secondary" style="width:100%;margin-top:12px"
+      onclick="shareReferral()">Share Invite</button>
+  </div>  <h3 style="margin-top:24px">Referral Network</h3>  <div class="referral-levels">
+    <button class="profile-card referral-level" onclick="showReferralLevel(1)">
+      <span>🟢 Level 1</span>
+      <strong id="level1Count">0</strong>
+      <small>Direct Referrals</small>
+      <span>View Members →</span>
+    </button><button class="profile-card referral-level" onclick="showReferralLevel(2)">
+  <span>🔵 Level 2</span>
+  <strong id="level2Count">0</strong>
+  <small>Second Level</small>
+  <span>View Members →</span>
+</button>
+
+<button class="profile-card referral-level" onclick="showReferralLevel(3)">
+  <span>🟣 Level 3</span>
+  <strong id="level3Count">0</strong>
+  <small>Third Level</small>
+  <span>View Members →</span>
+</button>
+
+  </div>  <div id="referralMembers" class="profile-card"
+    style="margin-top:16px;display:none">
+    <h3 id="referralMembersTitle">Level 1 Members</h3>
+    <div id="referralMembersList">
+      <p class="muted">No referrals yet.</p>
+    </div>
+  </div>  <p class="muted" style="margin-top:16px">
+    Referral counts and member lists will appear when connected
+    to actual registered referral records.
+  </p>
 </section>
 
 
@@ -678,6 +740,27 @@ async function shareReferral(){
     await copyReferral();
   }
 }
+  function showReferralLevel(level) {
+  const panel = document.getElementById("referralMembers");
+  const title = document.getElementById("referralMembersTitle");
+  const list = document.getElementById("referralMembersList");
+
+  if (!panel || !title || !list) return;
+
+  title.textContent = `Level ${level} Members`;
+
+  list.innerHTML = `
+    <p class="muted">
+      Ang actual referral records wala pa makonektar.
+    </p>
+  `;
+
+  panel.style.display = "block";
+  panel.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
+  }
 
 function renderMarketTicker(){
   const track=document.getElementById("marketTrack");
