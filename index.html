@@ -159,14 +159,68 @@ h3{font-size:15px;margin:0 0 8px}
 <button class="secondary" style="width:100%" onclick="shareReferral()">Share invite</button>
 </section>
 
-<section id="wallet" class="page">
-<h1>Wallet</h1><p class="muted">Demo wallet overview</p>
-<div class="balance-card"><div class="label">DEMO BALANCE</div><div class="balance">₱2,560.00</div><div class="positive">Preview only · No real funds</div></div>
-<div class="profile-card"><div class="row"><span>Deposit</span><span class="pill">Not connected</span></div><p class="muted">Payment processing is not configured. Do not send money to this demo website.</p><div class="row"><span>Withdrawal</span><span class="pill">Not connected</span></div></div>
-</section>
+
 
 <section id="history" class="page"><h1>Transaction History</h1><div class="empty">No transactions yet.<br><br>This demo does not process real payments.</div></section>
+<section id="wallet" class="page">
+  <h1>Wallet</h1>
+  <p class="muted">Demo wallet overview</p>
 
+  <div class="balance-card">
+    <div class="label">DEMO BALANCE</div>
+    <div class="balance">₱2,560.00</div>
+    <div class="positive">Preview only · No real funds</div>
+  </div>
+
+  <div class="profile-card">
+    <h2>Deposit via QRPH</h2>
+    <p class="muted">
+      Scan the QRPH code using a compatible payment app.
+      Verify the recipient details before making any payment.
+    </p>
+
+    <div style="background:#fff;border-radius:16px;padding:14px;text-align:center;margin:16px 0;">
+      <img
+        id="qrphImage"
+        src="https://raw.githubusercontent.com/Jeanmark747/Growrise/refs/heads/main/qr_20d8d72d4dead69dd20f5db7%2520(1)-2.jpg"
+        alt="QRPH payment code"
+        style="display:block;width:100%;max-width:320px;height:auto;margin:auto;border-radius:8px;"
+        onerror="this.style.display='none';document.getElementById('qrphError').style.display='block';"
+      >
+
+      <p id="qrphError" style="display:none;color:#b00020;font-size:13px;">
+        Dili ma-load ang QRPH image. Susiha ang image link.
+      </p>
+    </div>
+
+    <a
+      href="https://raw.githubusercontent.com/Jeanmark747/Growrise/refs/heads/main/qr_20d8d72d4dead69dd20f5db7%2520(1)-2.jpg"
+      target="_blank"
+      rel="noopener"
+      class="primary"
+      style="display:block;text-align:center;text-decoration:none;"
+    >OPEN QR IMAGE</a>
+
+    <div class="notice">
+      DEMO NOTICE: Susiha una ang ngalan sa recipient ug payment details.
+      Dili awtomatikong ma-confirm sa NEXORA ang imong payment.
+    </div>
+  </div>
+
+  <div class="profile-card">
+    <h2>Withdrawal</h2>
+
+    <div class="row">
+      <span>Withdrawal status</span>
+      <span class="pill">Not connected</span>
+    </div>
+
+    <p class="muted">
+      Withdrawal processing is not configured.
+      Walay real funds nga gi-handle niini nga demo website.
+    </p>
+  </div>
+</section>
 <section id="profile" class="page">
 <h1>My Profile</h1>
 <div class="profile-card"><div class="profile-row"><span>Platform</span><strong>NEXORA</strong></div><div class="profile-row"><span>Mobile number</span><strong id="profilePhone">—</strong></div><div class="profile-row"><span>Account status</span><strong style="color:var(--green)">Signed in</strong></div></div>
