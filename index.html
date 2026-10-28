@@ -792,7 +792,61 @@ document.getElementById("authForm").addEventListener("submit",async event=>{
     button.disabled=false;  
   }  
 });  
-  
+  /* LOAD REAL WALLET BALANCE */
+async function loadWalletBalance() {
+  const balanceElements = document.querySelectorAll(".balance");
+
+  try {
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error) throw error;
+
+    const session = data.session;
+
+    if (!session?.access_token) {
+      throw new Error("Please log in again.");
+    }
+
+    const response = await fetch(
+      NEXORA_AUTH_URL + "/wallet/balance",
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + session.access_token
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Unable to load wallet balance.");
+    }
+
+    const balance = Number(result.balance);
+
+    if (!Number.isFinite(balance)) {
+      throw new Error("Invalid wallet balance received.");
+    }
+
+    const formattedBalance = new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: result.currency || "PHP",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(balance);
+
+    balanceElements.forEach(element => {
+      element.textContent = formattedBalance;
+    });
+
+    return balance;
+
+  } catch (error) {
+    console.error("Wallet balance loading error:", error);
+    return null;
+  }
+}
 async function openDashboard(user,phoneOverride=""){  
   const phone=phoneOverride||user?.user_metadata?.mobile_number||user?.phone||signedInPhone||"";  
   signedInPhone=phone;  
@@ -803,10 +857,11 @@ async function openDashboard(user,phoneOverride=""){
   document.getElementById("profilePhone").textContent=phone||"—";  
   document.getElementById("welcomeText").textContent=phone?"Welcome back, "+phone:"Welcome back";  
   
-    renderMyPlans();  
-  await loadReferralData();  
-  showPage("home");  
-}  
+  renderMyPlans();
+await loadReferralData();
+await loadWalletBalance();
+showPage("home");
+}
   
 function showPage(id){  
   document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));  
