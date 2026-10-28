@@ -280,17 +280,11 @@ h3{font-size:15px;margin:0 0 8px}
       rel="noopener"
       class="primary"
       style="display:block;text-align:center;text-decoration:none;margin-bottom:20px;"
-    >OPEN QRPH</a>
+    
 
-<button
-  type="button"
-  id="paymongoButton"
-  class="primary"
-  style="margin-bottom:20px;"
->
-  PAY WITH GCASH / PAYMONGO
-</button>
-<p id="paymongoMessage" class="message" role="status"></p>
+
+
+
 
     <hr style="border:0;border-top:1px solid #ddd;margin:20px 0;">
 
@@ -1098,10 +1092,6 @@ supabaseClient.auth.onAuthStateChange((_event,session)=>{
 init();
 </script>
   
-<script>
-document.getElementById("paymongoButton").addEventListener("click", async () => {
-  const button = document.getElementById("paymongoButton");
-  const message = document.getElementById("paymongoMessage");
 
   try {
     const amount = Number(document.getElementById("depositAmount").value);
